@@ -542,7 +542,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>22 sites · Site IA Explorer</p>
+    <p>24 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -569,7 +569,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">22 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">24 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -1688,7 +1688,7 @@ const SITES = [
   },
   {
     id: 'nwhlabs',
-    name: 'Northwell Health Labs',
+    name: 'Labs',
     abbr: 'NL',
     url: 'nwhlabs.northwell.edu',
     pages: 205,
@@ -1744,6 +1744,57 @@ const SITES = [
         n('/labfly','section',
           l('/book-appointment','tool'),
           l('/how-it-works')
+        )
+      )
+    ]
+  },
+  {
+    id: 'gvh',
+    name: 'Greenwich Village Hospital',
+    abbr: 'GVH',
+    url: 'gvh.northwell.edu',
+    pages: 28,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Community-Based Medicine','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section',
+          l('/emergency-department','program'),
+          l('/imaging','program'),
+          l('/orthopedics','program'),
+          l('/ambulatory-surgery-center','program'),
+          l('/cath-ep-lab','program'),
+          l('/gastroenterology','program'),
+          l('/physical-medicine-rehabilitation','program'),
+          l('/robotic-joint-surgery','program'),
+          l('/spine-center','program'),
+          l('/nearby-physician-practices','program'),
+          n('/affiliated-via-lenox-hill','section',
+            l('/cardiac-surgery','program'),
+            l('/neurosurgery','program'),
+            l('/obstetrics-gynecology','program')
+          )
+        ),
+        n('/your-visit','section',
+          l('/visiting-hours-guidelines'),
+          l('/parking'),
+          l('/transportation'),
+          l('/driving-directions'),
+          l('/patients-rights-responsibilities')
+        ),
+        n('/community-based-medicine','section',
+          l('/lgbtqia-community-center-partnership'),
+          l('/nyc-aids-memorial'),
+          l('/community-partnerships [15+ orgs]')
+        ),
+        n('/about-us','section',
+          l('/leadership'),
+          l('/building-history')
+        ),
+        n('/newsroom','section',
+          l('/the-latest','content'),
+          l('/insights','content'),
+          l('/publications → northwell-connections-manhattan','content')
         )
       )
     ]
@@ -1807,7 +1858,7 @@ function buildSidebar() {
     label.textContent = gName;
     list.appendChild(label);
 
-    groups[gName].forEach(s => {
+    groups[gName].sort((a, b) => a.name.localeCompare(b.name)).forEach(s => {
       const item = document.createElement('div');
       item.className = 'site-item';
       item.dataset.id = s.id;
