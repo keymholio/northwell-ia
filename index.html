@@ -410,6 +410,7 @@
   .cat-community { color: #1a73e8; }
   .cat-behavioral{ color: #1a73e8; }
   .cat-content   { color: #00a3ad; }
+  .cat-labs      { color: #188038; }
 
   .dot.cat-flagship  { background: #fff; }
   .dot.cat-major     { background: #1a73e8; }
@@ -418,6 +419,7 @@
   .dot.cat-community { background: #1a73e8; }
   .dot.cat-behavioral{ background: #1a73e8; }
   .dot.cat-content   { background: #00a3ad; }
+  .dot.cat-labs      { background: #188038; }
 
   .meta-chip.cat-flagship  { color: #003087; border-color: #003087; background: #e8f0fe; }
   .meta-chip.cat-major     { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
@@ -426,6 +428,7 @@
   .meta-chip.cat-community { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
   .meta-chip.cat-behavioral{ color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
   .meta-chip.cat-content   { color: #008c96; border-color: #008c96; background: #e6f7f8; }
+  .meta-chip.cat-labs      { color: #188038; border-color: #188038; background: #e6f4ea; }
 
   #site-badge.cat-flagship  { background: #003087; }
   #site-badge.cat-major     { background: #1a73e8; }
@@ -434,6 +437,7 @@
   #site-badge.cat-community { background: #1a73e8; }
   #site-badge.cat-behavioral{ background: #1a73e8; }
   #site-badge.cat-content   { background: #008c96; }
+  #site-badge.cat-labs      { background: #188038; }
 
   .overview-card.cat-flagship  { border-top-color: #003087; }
   .overview-card.cat-major     { border-top-color: #1a73e8; }
@@ -442,6 +446,7 @@
   .overview-card.cat-community { border-top-color: #1a73e8; }
   .overview-card.cat-behavioral{ border-top-color: #1a73e8; }
   .overview-card.cat-content   { border-top-color: #008c96; }
+  .overview-card.cat-labs      { border-top-color: #188038; }
 
   #back-btn {
     display: none;
@@ -579,11 +584,12 @@ document.getElementById('auth-input').focus();
 const CATS = {
   flagship:  { label: 'Root Site',       group: 'Root Site' },
   major:     { label: 'Hospital',        group: 'Hospitals' },
-  pediatric: { label: 'Pediatric',       group: 'Pediatric Ecosystem' },
+  pediatric: { label: 'Pediatric',       group: 'Clinical Ecosystem' },
   research:  { label: 'Research / Professional', group: 'Research & Professional' },
   community: { label: 'Hospital',        group: 'Hospitals' },
-  behavioral:{ label: 'Hospital',          group: 'Hospitals' },
+  behavioral:{ label: 'Hospital',        group: 'Hospitals' },
   content:   { label: 'Content Brand',   group: 'Content' },
+  labs:      { label: 'Labs',            group: 'Clinical Ecosystem' },
 };
 
 // Tree node helper: n(label, tag, ...children)
@@ -1679,6 +1685,68 @@ const SITES = [
         l('/sites/ [PDFs: hospital map, SWAY referral guide]','pdf')
       )
     ]
+  },
+  {
+    id: 'nwhlabs',
+    name: 'Northwell Health Labs',
+    abbr: 'NL',
+    url: 'nwhlabs.northwell.edu',
+    pages: 205,
+    cat: 'labs',
+    topNav: ['About Us','Patients','Providers','Locations','Additional Services'],
+    tree: [
+      n('/ Home','',
+        n('/about-us','section',
+          l('/careers → jobs.northwell.edu')
+        ),
+        n('/patients','section',
+          l('/pay-bill'), l('/view-lab-results'),
+          l('/make-appointment'),
+          l('/labfly','tool'),
+          l('/insurance-information'),
+          l('/test-preparation')
+        ),
+        n('/providers','section',
+          n('/programs-services','section',
+            l('/autopsy-pathology','program'),
+            l('/breast-pathology','program'),
+            l('/cytogenetic-molecular-diagnostics','program'),
+            l('/cytopathology','program'),
+            l('/dermatopathology','program'),
+            l('/gastrointestinal-pathology','program'),
+            l('/genitourinary-urologic-pathology','program'),
+            l('/gynecologic-pathology','program'),
+            l('/hematology-coagulation-testing','program'),
+            l('/hematopathology','program'),
+            l('/microbiology-virology-molecular-diagnostics','program'),
+            l('/neuropathology','program'),
+            l('/oral-maxillofacial-pathology','program'),
+            l('/pediatric-pathology','program'),
+            l('/renal-pathology','program'),
+            l('/soft-tissue-bone-pathology','program'),
+            l('/thoracic-pathology','program')
+          ),
+          n('/technical-bulletins','section',
+            l('/2026 [5 bulletins]','pdf'),
+            l('/2025 [60+ bulletins]','pdf'),
+            l('/2024 [40+ bulletins]','pdf'),
+            l('/2023 [50+ bulletins]','pdf'),
+            l('/2022 [35+ bulletins]','pdf')
+          )
+        ),
+        l('/locations','tool'),
+        n('/additional-services','section',
+          l('/lab-management','program'),
+          l('/reference-testing','program'),
+          l('/emr-interfacing','program'),
+          l('/lab-cooperative','program')
+        ),
+        n('/labfly','section',
+          l('/book-appointment','tool'),
+          l('/how-it-works')
+        )
+      )
+    ]
   }
 ];
 
@@ -1688,7 +1756,7 @@ const SITES = [
 const GROUP_ORDER = [
   'Root Site',
   'Hospitals',
-  'Pediatric Ecosystem',
+  'Clinical Ecosystem',
   'Research & Professional',
   'Content',
 ];
