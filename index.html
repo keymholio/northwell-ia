@@ -547,7 +547,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>27 sites · Site IA Explorer</p>
+    <p>29 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -574,7 +574,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">27 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">29 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -1917,6 +1917,102 @@ const SITES = [
           l('/request-appointment','tool'),
           l('/free-varicose-vein-screening','tool')
         )
+      )
+    ]
+  },
+  {
+    id: 'transplant',
+    name: 'Transplant Institute',
+    abbr: 'TI',
+    url: 'transplant.northwell.edu',
+    pages: 30,
+    cat: 'institute',
+    topNav: ['Find a Doctor','Locations','Areas of Care','Organ Donation','About Us'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        l('/locations','tool'),
+        n('/areas-of-care','section',
+          n('/center-for-liver-disease-transplantation','program',
+            l('/liver-transplant'), l('/living-donor-liver')
+          ),
+          n('/center-for-kidney-transplantation','program',
+            l('/kidney-transplant'), l('/pancreas-transplant'), l('/living-donor-kidney')
+          ),
+          n('/center-for-heart-transplantation','program',
+            l('/heart-failure'), l('/heart-transplant'), l('/mechanical-circulatory-support')
+          ),
+          n('/center-for-advanced-lung-disease-transplantation','program',
+            l('/lung-disease'), l('/lung-transplant')
+          ),
+          n('/pediatric-programs','section',
+            l('/pediatric-kidney-transplant'),
+            l('/pediatric-heart-transplant')
+          )
+        ),
+        n('/organ-donation','section',
+          l('/living-donation → /liver, /kidney'),
+          l('/deceased-donation'),
+          l('/register-as-donor','tool')
+        ),
+        n('/about','section',
+          l('/patient-stories','content'),
+          l('/newsroom','content')
+        )
+      )
+    ]
+  },
+  {
+    id: 'spine',
+    name: 'Spine Institute',
+    abbr: 'SI',
+    url: 'spine.northwell.edu',
+    pages: 52,
+    cat: 'institute',
+    topNav: ['Find a Doctor','Locations','Areas of Care','Navigating Care','Clinical Trials & Resources','For Professionals','About Us'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        l('/locations','tool'),
+        n('/areas-of-care','section',
+          l('/degenerative-spine-diseases','program'),
+          l('/revision-surgery','program'),
+          l('/scoliosis-spinal-deformities','program'),
+          l('/spinal-infections','program'),
+          l('/spinal-tumors','program'),
+          l('/spinal-injuries','program'),
+          n('/diagnostics','section',
+            l('/advanced-imaging'), l('/diagnostic-injections'),
+            l('/electrodiagnostics'), l('/clinical-assessments')
+          ),
+          n('/treatments','section',
+            l('/minimally-invasive-spine-surgery'), l('/robotic-surgery'),
+            l('/spinal-fusion'), l('/disc-replacement'),
+            l('/laminectomy'), l('/decompression-surgeries'),
+            l('/spinal-injection-procedures'), l('/physical-therapy'),
+            l('/occupational-therapy'), l('/acupuncture-complementary-medicine')
+          )
+        ),
+        n('/navigating-spine-care','section',
+          l('/care-navigators'), l('/appointments'), l('/continued-care')
+        ),
+        n('/clinical-trials-resources','section',
+          n('/clinical-trials','section',
+            l('/orthopedic-surgery-trials','tool'),
+            l('/neurosurgery-trials','tool'),
+            l('/physical-medicine-rehabilitation-trials','tool')
+          ),
+          n('/resources-education','section',
+            l('/back-pain-assessment','tool'),
+            l('/healthy-back-neck-guide','pdf'),
+            l('/expert-insights [14 articles]','content'),
+            l('/faqs'), l('/patient-testimonials','content')
+          )
+        ),
+        n('/for-professionals','section',
+          l('/orthopedics'), l('/neurosciences'), l('/rehabilitation')
+        ),
+        l('/about-us','section')
       )
     ]
   },
