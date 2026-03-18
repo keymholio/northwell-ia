@@ -411,6 +411,7 @@
   .cat-behavioral{ color: #1a73e8; }
   .cat-content   { color: #00a3ad; }
   .cat-labs      { color: #188038; }
+  .cat-institute { color: #188038; }
 
   .dot.cat-flagship  { background: #fff; }
   .dot.cat-major     { background: #1a73e8; }
@@ -420,6 +421,7 @@
   .dot.cat-behavioral{ background: #1a73e8; }
   .dot.cat-content   { background: #00a3ad; }
   .dot.cat-labs      { background: #188038; }
+  .dot.cat-institute { background: #188038; }
 
   .meta-chip.cat-flagship  { color: #003087; border-color: #003087; background: #e8f0fe; }
   .meta-chip.cat-major     { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
@@ -429,6 +431,7 @@
   .meta-chip.cat-behavioral{ color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
   .meta-chip.cat-content   { color: #008c96; border-color: #008c96; background: #e6f7f8; }
   .meta-chip.cat-labs      { color: #188038; border-color: #188038; background: #e6f4ea; }
+  .meta-chip.cat-institute { color: #188038; border-color: #188038; background: #e6f4ea; }
 
   #site-badge.cat-flagship  { background: #003087; }
   #site-badge.cat-major     { background: #1a73e8; }
@@ -438,6 +441,7 @@
   #site-badge.cat-behavioral{ background: #1a73e8; }
   #site-badge.cat-content   { background: #008c96; }
   #site-badge.cat-labs      { background: #188038; }
+  #site-badge.cat-institute { background: #188038; }
 
   .overview-card.cat-flagship  { border-top-color: #003087; }
   .overview-card.cat-major     { border-top-color: #1a73e8; }
@@ -447,6 +451,7 @@
   .overview-card.cat-behavioral{ border-top-color: #1a73e8; }
   .overview-card.cat-content   { border-top-color: #008c96; }
   .overview-card.cat-labs      { border-top-color: #188038; }
+  .overview-card.cat-institute { border-top-color: #188038; }
 
   #back-btn {
     display: none;
@@ -542,7 +547,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>24 sites · Site IA Explorer</p>
+    <p>25 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -569,7 +574,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">24 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">25 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -590,6 +595,7 @@ const CATS = {
   behavioral:{ label: 'Hospital',        group: 'Hospitals' },
   content:   { label: 'Content Brand',   group: 'Content' },
   labs:      { label: 'Labs',            group: 'Clinical Ecosystem' },
+  institute: { label: 'Institute',       group: 'Clinical Ecosystem' },
 };
 
 // Tree node helper: n(label, tag, ...children)
@@ -1796,6 +1802,89 @@ const SITES = [
           l('/insights','content'),
           l('/publications → northwell-connections-manhattan','content')
         )
+      )
+    ]
+  },
+  {
+    id: 'cancer',
+    name: 'Cancer Institute',
+    abbr: 'CI',
+    url: 'cancer.northwell.edu',
+    pages: 95,
+    cat: 'institute',
+    topNav: ['Find a Doctor','Locations','Areas of Cancer Care','Clinical Trials','Navigating Care'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        l('/locations','tool'),
+        n('/cancer-care','section',
+          n('/breast-cancer','program', l('/breast-cancer')),
+          n('/blood-cancers','program',
+            l('/acute-lymphocytic-leukemia'), l('/bone-marrow-stem-cell-transplant'),
+            l('/chronic-lymphocytic-leukemia'), l('/chronic-myelogenous-leukemia'),
+            l('/hodgkin-lymphoma'), l('/multiple-myeloma'),
+            l('/myelodysplastic-syndrome'), l('/myeloproliferative-neoplasm'),
+            l('/non-hodgkin-lymphoma')
+          ),
+          n('/colorectal-cancers','program',
+            l('/anal-cancer'), l('/colon-cancer'), l('/rectal-cancer')
+          ),
+          n('/skin-cancers','program',
+            l('/basal-cell-carcinoma'), l('/melanoma'),
+            l('/merkel-cell-carcinoma'), l('/squamous-cell-carcinoma')
+          ),
+          n('/gastrointestinal-biliary','program',
+            l('/bile-duct-cancer'), l('/esophageal-cancer'), l('/gallbladder-cancer'),
+            l('/liver-cancer'), l('/neuroendocrine-tumors'),
+            l('/pancreatic-cancer'), l('/stomach-cancer')
+          ),
+          n('/urology','program',
+            l('/adrenal-gland-tumors'), l('/bladder-cancer'), l('/kidney-cancer'),
+            l('/penile-cancer'), l('/prostate-cancer'), l('/testicular-cancer')
+          ),
+          n('/gynecologic','program',
+            l('/cervical-cancer'), l('/ovarian-cancer'), l('/tubal-cancer'),
+            l('/uterine-endometrial-cancer'), l('/vaginal-cancer'), l('/vulvar-cancer')
+          ),
+          n('/head-neck','program',
+            l('/acoustic-neuroma'), l('/hyperparathyroidism'),
+            l('/nasal-cavity-paranasal-sinus-cancer'), l('/oral-cancer'),
+            l('/throat-cancer'), l('/thyroid-cancer')
+          ),
+          n('/musculoskeletal','program',
+            l('/bone-cancer'), l('/soft-tissue-sarcoma')
+          ),
+          n('/neurologic','program',
+            l('/brain-tumors'), l('/pituitary-tumors'),
+            l('/skull-base-tumors'), l('/spinal-tumors')
+          ),
+          l('/pediatric-childhood-cancers','program'),
+          n('/thoracic','program',
+            l('/lung-cancer'), l('/mesothelioma'),
+            l('/thymoma-thymic-carcinoma')
+          )
+        ),
+        n('/clinical-trials','section',
+          l('/search-trials [200+ active]','tool'),
+          l('/cshl-partnership'),
+          l('/start-center-partnership')
+        ),
+        n('/navigating-care','section',
+          l('/cancer-navigation'),
+          l('/prevention-and-screening'),
+          l('/comprehensive-cancer-care'),
+          l('/our-treatments'),
+          l('/caregiver-support'),
+          l('/patient-testimonials','content'),
+          l('/paying-for-care')
+        ),
+        n('/about-us','section',
+          l('/our-approach'),
+          l('/accreditations'),
+          l('/annual-report','pdf'),
+          l('/support-services [30+ groups]')
+        ),
+        l('/newsroom','content')
       )
     ]
   }
