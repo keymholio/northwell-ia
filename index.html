@@ -516,14 +516,18 @@
 </div>
 
 <script>
-function checkAuth() {
+const AUTH_HASH = '8d7c4e246994d54c4a58f9a8e55fb9bc41594c8fa83429723abb329fea99e457';
+
+async function checkAuth() {
   const input = document.getElementById('auth-input');
-  if (input.value === 'constellation2026') {
+  const val = input.value;
+  input.value = '';
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+  const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  if (hash === AUTH_HASH) {
     document.getElementById('auth-overlay').style.display = 'none';
-    input.value = '';
   } else {
     document.getElementById('auth-error').textContent = 'Incorrect password. Please try again.';
-    input.value = '';
     input.focus();
   }
 }
