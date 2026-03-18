@@ -547,7 +547,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>29 sites · Site IA Explorer</p>
+    <p>30 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -574,7 +574,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">29 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">30 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -863,7 +863,7 @@ const SITES = [
   },
   {
     id: 'feinstein',
-    name: 'Feinstein Institutes',
+    name: 'Feinstein Institute',
     abbr: 'FI',
     url: 'feinstein.northwell.edu',
     pages: 680,
@@ -1885,6 +1885,78 @@ const SITES = [
           l('/support-services [30+ groups]')
         ),
         l('/newsroom','content')
+      )
+    ]
+  },
+  {
+    id: 'physicians',
+    name: 'Physicians Portal',
+    abbr: 'PH',
+    url: 'physicians.northwell.edu',
+    pages: 90,
+    cat: 'research',
+    topNav: ['Academic Departments','Education','Resources','Careers'],
+    tree: [
+      n('/ Home','',
+        n('/academic-departments','section',
+          n('/institutes','section',
+            l('/cancer','program'),
+            l('/institute-of-neurology-neurosurgery','program'),
+            l('/orthopaedic-institute','program')
+          ),
+          n('/adult-specialties','section',
+            l('/anesthesiology'), l('/behavioral-health-psychiatry'),
+            l('/bioelectronic-medicine'), l('/cardiac-surgery'),
+            l('/cardiology'), l('/department-of-medicine'),
+            l('/dermatology'), l('/emergency-medicine'),
+            l('/endocrinology'), l('/family-medicine'),
+            l('/gastroenterology'), l('/general-internal-medicine'),
+            l('/geriatrics-palliative-medicine'), l('/hematology-medical-oncology'),
+            l('/hepatology'), l('/hospital-medicine'),
+            l('/infectious-disease'), l('/maternal-fetal-medicine'),
+            l('/nephrology'), l('/neurosurgery'),
+            l('/obstetrics-gynecology'), l('/ophthalmology'),
+            l('/orthopaedic'), l('/plastic-reconstructive-surgery'),
+            l('/pulmonary-critical-care-sleep-medicine'), l('/radiology-imaging'),
+            l('/rehabilitation'), l('/rheumatology'),
+            l('/surgery'), l('/thoracic-surgery'),
+            l('/urology'), l('/vascular-surgery')
+          ),
+          n('/pediatric-specialties','section',
+            l('/cohen-childrens-medical-center'),
+            l('/general-pediatrics'), l('/pediatric-cardiology'),
+            l('/pediatric-cardiothoracic-surgery'), l('/pediatric-emergency-medicine'),
+            l('/pediatric-endocrinology-diabetes'), l('/pediatric-gastroenterology'),
+            l('/pediatric-hematology-oncology'), l('/pediatric-hospital-medicine'),
+            l('/pediatric-intensive-care'), l('/pediatric-neonatology'),
+            l('/pediatric-nephrology-kidney-transplantation'), l('/pediatric-neurology'),
+            l('/pediatric-orthopaedics'), l('/pediatric-rheumatology'),
+            l('/pediatric-surgery'), l('/pediatric-urology'), l('/pediatric-trauma')
+          )
+        ),
+        n('/education','section',
+          l('/graduate-medical-education [200+ programs, 21+ hospitals]'),
+          l('/office-of-academic-affairs'),
+          l('/continuing-medical-education'),
+          l('/continuing-professional-programs'),
+          n('/affiliated-institutions','section',
+            l('/zucker-school-of-medicine'),
+            l('/center-for-learning-and-innovation'),
+            l('/elmezzi-graduate-school-of-molecular-medicine')
+          )
+        ),
+        n('/resources','section',
+          l('/physician-portal','tool'),
+          l('/northwell-physician-partners'),
+          l('/laboratory-services'),
+          l('/northwell-link','tool'),
+          l('/northwell-health-libraries'),
+          l('/hospice-care-network'),
+          l('/center-for-global-health'),
+          l('/rapid-diagnostic-program'),
+          l('/liver-transplant-program')
+        ),
+        l('/careers → jobs.northwell.edu','tool')
       )
     ]
   },
