@@ -547,7 +547,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>26 sites · Site IA Explorer</p>
+    <p>27 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -574,7 +574,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">26 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">27 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -1885,6 +1885,38 @@ const SITES = [
           l('/support-services [30+ groups]')
         ),
         l('/newsroom','content')
+      )
+    ]
+  },
+  {
+    id: 'vein',
+    name: 'Vein Care',
+    abbr: 'VC',
+    url: 'vein.northwell.edu',
+    pages: 20,
+    cat: 'institute',
+    topNav: ['Find a Doctor','Locations','Areas of Vein Care','About Us','Contact Us'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        l('/locations','tool'),
+        n('/areas-of-vein-care','section',
+          l('/varicose-veins-spider-veins','program'),
+          l('/pelvic-vein-disorders','program'),
+          l('/venous-malformations','program'),
+          l('/deep-vein-thrombosis','program'),
+          l('/chronic-venous-obstruction','program')
+        ),
+        n('/about-us','section',
+          l('/our-approach'),
+          l('/accreditations'),
+          l('/leadership'),
+          l('/newsroom','content')
+        ),
+        n('/contact-us','section',
+          l('/request-appointment','tool'),
+          l('/free-varicose-vein-screening','tool')
+        )
       )
     ]
   },
