@@ -414,6 +414,7 @@
   .cat-content   { color: #00a3ad; }
   .cat-labs      { color: #188038; }
   .cat-institute { color: #188038; }
+  .cat-insurance { color: #0277bd; }
 
   .dot.cat-flagship  { background: #fff; }
   .dot.cat-major     { background: #1a73e8; }
@@ -424,6 +425,7 @@
   .dot.cat-content   { background: #00a3ad; }
   .dot.cat-labs      { background: #188038; }
   .dot.cat-institute { background: #188038; }
+  .dot.cat-insurance { background: #0277bd; }
 
   .meta-chip.cat-flagship  { color: #003087; border-color: #003087; background: #e8f0fe; }
   .meta-chip.cat-major     { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
@@ -434,6 +436,7 @@
   .meta-chip.cat-content   { color: #008c96; border-color: #008c96; background: #e6f7f8; }
   .meta-chip.cat-labs      { color: #188038; border-color: #188038; background: #e6f4ea; }
   .meta-chip.cat-institute { color: #188038; border-color: #188038; background: #e6f4ea; }
+  .meta-chip.cat-insurance { color: #0277bd; border-color: #0277bd; background: #e3f2fd; }
 
   #site-badge.cat-flagship  { background: #003087; }
   #site-badge.cat-major     { background: #1a73e8; }
@@ -444,6 +447,7 @@
   #site-badge.cat-content   { background: #008c96; }
   #site-badge.cat-labs      { background: #188038; }
   #site-badge.cat-institute { background: #188038; }
+  #site-badge.cat-insurance { background: #0277bd; }
 
   .overview-card.cat-flagship  { border-top-color: #003087; }
   .overview-card.cat-major     { border-top-color: #1a73e8; }
@@ -454,6 +458,7 @@
   .overview-card.cat-content   { border-top-color: #008c96; }
   .overview-card.cat-labs      { border-top-color: #188038; }
   .overview-card.cat-institute { border-top-color: #188038; }
+  .overview-card.cat-insurance { border-top-color: #0277bd; }
 
   #back-btn {
     display: none;
@@ -549,7 +554,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>30 sites · Site IA Explorer</p>
+    <p>31 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -576,7 +581,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">30 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">31 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -598,6 +603,7 @@ const CATS = {
   content:   { label: 'Content Brand',   group: 'Content' },
   labs:      { label: 'Labs',            group: 'Clinical Ecosystem' },
   institute: { label: 'Institute',       group: 'Clinical Ecosystem' },
+  insurance: { label: 'Insurance',       group: 'Insurance' },
 };
 
 // Tree node helper: n(label, tag, ...children)
@@ -2210,8 +2216,52 @@ const SITES = [
         )
       )
     ]
+  },
+  {
+    id: 'northwelldirect',
+    name: 'Northwell Direct',
+    abbr: 'ND',
+    url: 'northwelldirect.northwell.edu',
+    pages: 45,
+    cat: 'insurance',
+    topNav: ['Network','Workplace Solutions','Newsroom','Blog','Contact Us'],
+    tree: [
+      n('/ Home','',
+        n('/network','section',
+          l('/find-a-provider','tool'),
+          l('/hospitals-and-facilities'),
+          l('/specialty-care'),
+          l('/primary-care')
+        ),
+        n('/workplace-solutions','section',
+          l('/behavioral-health'),
+          l('/primary-care'),
+          l('/vaccine-events'),
+          l('/occupational-medicine')
+        ),
+        n('/newsroom','section',
+          l('/press-releases'),
+          l('/in-the-news')
+        ),
+        n('/blog','section',
+          l('/healthcare-costs'),
+          l('/wellness'),
+          l('/maternity-care')
+        ),
+        l('/contact-us'),
+        n('/member-portal','tool',
+          l('/dashboard'),
+          l('/appointments'),
+          l('/billing'),
+          l('/profile'),
+          l('/settings')
+        )
+      )
+    ]
   }
 ];
+
+const fmtPages = p => p ? p.toLocaleString() : '—';
 
 // ─────────────────────────────────────────────
 // GROUP ORDER
@@ -2222,6 +2272,7 @@ const GROUP_ORDER = [
   'Clinical Ecosystem',
   'Research & Professional',
   'Content',
+  'Insurance',
 ];
 
 // ─────────────────────────────────────────────
@@ -2244,7 +2295,7 @@ function buildSidebar() {
     item.innerHTML = `
       <div class="dot cat-${root.cat}"></div>
       <div class="site-name">${root.name}</div>
-      <div class="page-count">${root.pages.toLocaleString()}</div>
+      <div class="page-count">${fmtPages(root.pages)}</div>
     `;
     item.onclick = () => showSite(root.id);
     list.appendChild(item);
@@ -2277,7 +2328,7 @@ function buildSidebar() {
       item.innerHTML = `
         <div class="dot cat-${s.cat}"></div>
         <div class="site-name">${s.name}</div>
-        <div class="page-count">${s.pages.toLocaleString()}</div>
+        <div class="page-count">${fmtPages(s.pages)}</div>
       `;
       item.onclick = () => showSite(s.id);
       list.appendChild(item);
@@ -2309,7 +2360,7 @@ function buildOverview() {
       <h3>${root.name}</h3>
       <div class="card-url">${root.url}</div>
       <div class="card-stats">
-        <span class="card-stat">📄 ${root.pages.toLocaleString()} pages</span>
+        <span class="card-stat">📄 ${fmtPages(root.pages)} pages</span>
         <span class="card-stat" style="background:transparent;padding:0;font-size:10px;opacity:.7">Root / Flagship</span>
       </div>
       <div class="card-top-nav">
@@ -2351,7 +2402,7 @@ function buildOverview() {
         <h3>${s.name}</h3>
         <div class="card-url">${s.url}</div>
         <div class="card-stats">
-          <span class="card-stat">📄 ${s.pages.toLocaleString()} pages</span>
+          <span class="card-stat">📄 ${fmtPages(s.pages)} pages</span>
           <span class="card-stat cat-${s.cat}" style="background:transparent;padding:0;font-size:10px;opacity:.7">${CATS[s.cat].label}</span>
         </div>
         <div class="card-top-nav">
@@ -2486,7 +2537,7 @@ function showSite(id) {
 
   const chip = document.getElementById('cat-chip');
   chip.className = `meta-chip cat-${site.cat}`;
-  chip.textContent = `${CATS[site.cat].label} · ${site.pages.toLocaleString()} pages`;
+  chip.textContent = `${CATS[site.cat].label} · ${fmtPages(site.pages)} pages`;
   chip.style.display = '';
 
   document.getElementById('expand-all').style.display = '';
@@ -2508,7 +2559,7 @@ function showSite(id) {
   header.className = 'tree-root-header';
   header.innerHTML = `
     <span>🌐 <strong>${site.url}</strong></span>
-    <span>📄 ${site.pages.toLocaleString()} pages in sitemap</span>
+    <span>📄 ${fmtPages(site.pages)} pages in sitemap</span>
     <span>🏷 ${CATS[site.cat].label}</span>
     <span>🔗 Top nav: ${site.topNav.join(' · ')}</span>
   `;
