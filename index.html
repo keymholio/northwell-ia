@@ -165,6 +165,8 @@
 
   #site-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
   #site-url { font-size: 12px; color: var(--gray-600); margin-top: 1px; }
+  #site-url a { color: inherit; text-decoration: none; }
+  #site-url a:hover { text-decoration: underline; }
 
   #topbar-meta {
     margin-left: auto;
@@ -608,9 +610,9 @@ const SITES = [
     name: 'Northwell Health',
     abbr: 'NW',
     url: 'www.northwell.edu',
-    pages: 520,
+    pages: 6316,
     cat: 'flagship',
-    topNav: ['Find & Book Care','Locations','Areas of Care','Pay a Bill','Patient Portal','About Us','Newsroom'],
+    topNav: ['Find & Book Care','Locations','Areas of Care','Pay a Bill','Patient Portal','Research & Innovation','About Us','Newsroom'],
     tree: [
       n('/ Home','',
         n('/find-care','section',
@@ -628,7 +630,20 @@ const SITES = [
           n('/community-health-wellness','program', l('/programs'),l('/events'),l('/community-service-plans')),
           l('/hospice-care')
         ),
-        n('/[30 clinical specialties]','section',
+        n('/clinical-services','section',
+          n('/featured-institutes','section',
+            l('/cancer-institute → cancer.northwell.edu','program'),
+            l('/cardiovascular-institute → heart.northwell.edu','program'),
+            l('/spine-institute → spine.northwell.edu','program'),
+            l('/transplant-institute → transplant.northwell.edu','program'),
+            l('/vein-care → vein.northwell.edu','program'),
+            l('/pediatrics → pediatrics.northwell.edu','program'),
+            l('/labs → nwhlabs.northwell.edu','program'),
+            l('/orthopaedic-institute','program'),
+            l('/neurosciences','program'),
+            l('/katz-institute-for-womens-health','program'),
+            l('/obstetrics-and-gynecology','program')
+          ),
           n('/behavioral-health','section', l('/programs-services'),l('/addiction-services'),l('/locations')),
           n('/eye-institute','section', l('/specialties [9]'),l('/find-a-doctor'),l('/locations')),
           n('/imaging','section', l('/services [20 imaging types]'),l('/specialties'),l('/locations')),
@@ -646,24 +661,62 @@ const SITES = [
           n('/dermatology','section',
             n('/areas-of-care','section', l('/cosmetic-dermatology','program'))
           ),
+          l('/cardiovascular-thoracic-services'),
+          l('/center-for-gun-violence-prevention','program'),
           l('/emergency-medicine'),
           l('/endocrinology-diabetes-metabolism'), l('/family-medicine'),
-          l('/gastroenterology'),
-          l('/nephrology'), l('/primary-care'), l('/rehabilitation-network'),
+          l('/gastroenterology'), l('/geriatrics-palliative-care'),
+          l('/hepatology'), l('/infectious-disease'),
+          l('/nephrology'), l('/neurology'),
+          l('/occupational-medicine-epidemiology-prevention'),
+          l('/pancreas-disease-center','program'),
+          l('/patient-blood-management-program'),
+          l('/primary-care'), l('/pulmonary-critical-care-sleep-medicine'),
+          l('/rehabilitation-network'),
           l('/rheumatology'), l('/robotic-surgery'), l('/surgery'),
-          l('/telehealth'), l('/urology'), l('/thoracic-surgery')
+          l('/telehealth'), l('/thoracic-surgery'),
+          l('/urgent-care → gohealthuc.com/northwell','tool'),
+          l('/urology')
         ),
+        n('/research-and-education','section',
+          l('/feinstein-institutes-for-medical-research → feinstein.northwell.edu'),
+          l('/clinical-trials','tool'),
+          l('/northwell-ventures'),
+          l('/center-for-learning-and-innovation')
+        ),
+        l('/support-and-resources/find-an-event','tool'),
+        l('/education-and-resources','content'),
+        l('/northwell-health-gives-back'),
+        l('/doctors-offices'),
+        l('/paying-for-care'),
+        l('/compliance-program'),
+        l('/for-professionals → professionals.northwell.edu'),
         n('/manage-your-care','section',
           l('/billpay'), l('/patient-portal → /mynorthwell, /doctor-direct'),
           l('/medical-records'), l('/insurance')
         ),
         n('/billing-and-insurance','section',
-          l('/price-estimator-tools'), l('/financial-assistance-programs-policies')
+          l('/price-estimator-tools'), l('/financial-assistance-programs-policies'),
+          l('/submit-your-insurance-information'),
+          l('/price-transparency-machine-readable-files')
         ),
         n('/help','section', l('/billing [FAQs]'),l('/insurance [FAQs]'),l('/caregiver-access'),l('/appointments'),l('/telehealth')),
+        n('/employees','section',
+          l('/northwell-connect [intranet]'), l('/myexperience [payroll, email]'),
+          l('/teamwell [wellness]'), l('/online-brand-center'),
+          l('/patient-portal → mynorthwell.org'), l('/trustee-portal'),
+          l('/viva-engage → #NorthwellLife community'), l('/northwell-kids-and-families'),
+          l('/careers → jobs.northwell.edu'), l('/c-suite-perspectives'),
+          l('/clinical-views')
+        ),
         n('/about-northwell','section',
           l('/contact-us → /patient-relations'), l('/volunteer'),
-          l('/financial-health-annual-reports'), l('/commitment-to-excellence'),l('/vendor-inquiries')
+          l('/financial-health-annual-reports'), l('/commitment-to-excellence'),
+          l('/vendor-inquiries'), l('/alumni → alumni.northwell.edu'),
+          l('/give → give.northwell.edu'),
+          l('/jobs → jobs.northwell.edu'),
+          l('/the-well → thewell.northwell.edu'),
+          l('/compliance-program')
         ),
         n('/news','section',
           l('/the-latest [~40 articles]'), l('/insights [long-form]'),
@@ -683,7 +736,7 @@ const SITES = [
     name: 'Pediatrics',
     abbr: 'PD',
     url: 'pediatrics.northwell.edu',
-    pages: 497,
+    pages: 362,
     cat: 'pediatric',
     topNav: ['Find a Doctor','Locations','Areas of Care','Research','About Us'],
     tree: [
@@ -866,7 +919,7 @@ const SITES = [
     name: 'Feinstein Institute',
     abbr: 'FI',
     url: 'feinstein.northwell.edu',
-    pages: 680,
+    pages: 525,
     cat: 'research',
     topNav: ['Institutes & Researchers','Clinical Trials','Education','Events','For Professionals','Journals'],
     tree: [
@@ -909,7 +962,7 @@ const SITES = [
     name: 'For Professionals',
     abbr: 'PR',
     url: 'professionals.northwell.edu',
-    pages: 118,
+    pages: 106,
     cat: 'research',
     topNav: ['Nursing','Advanced Clinical Providers','Pharmacy','Professional Development'],
     tree: [
@@ -2323,6 +2376,14 @@ const TAG_MAP = {
   '':        { cls: '',            icon: '🏠' },
 };
 
+function sortTree(node) {
+  if (node.children && node.children.length) {
+    node.children.sort((a, b) => a.label.localeCompare(b.label));
+    node.children.forEach(sortTree);
+  }
+  return node;
+}
+
 function renderNode(node, depth) {
   const el = document.createElement('div');
   el.className = 'tree-node';
@@ -2421,7 +2482,7 @@ function showSite(id) {
   badge.style.display = '';
 
   document.getElementById('site-title').textContent = site.name;
-  document.getElementById('site-url').textContent = site.url;
+  document.getElementById('site-url').innerHTML = `<a href="https://${site.url}" target="_blank" rel="noopener">${site.url}</a>`;
 
   const chip = document.getElementById('cat-chip');
   chip.className = `meta-chip cat-${site.cat}`;
@@ -2457,7 +2518,7 @@ function showSite(id) {
   body.className = 'tree-body';
 
   site.tree.forEach(node => {
-    body.appendChild(renderNode(node, 0));
+    body.appendChild(renderNode(sortTree(node), 0));
   });
 
   root.appendChild(body);
