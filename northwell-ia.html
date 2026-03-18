@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northwell Health — Site IA</title>
+<style>
+  :root {
+    --navy: #003087;
+    --teal: #00a3ad;
+    --light-teal: #e6f7f8;
+    --green: #2e7d32;
+    --purple: #6a1b9a;
+    --orange: #e65100;
+    --red: #c62828;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f4;
+    --gray-200: #e8eaed;
+    --gray-300: #dadce0;
+    --gray-400: #bdc1c6;
+    --gray-600: #80868b;
+    --gray-800: #3c4043;
+    --gray-900: #202124;
+    --sidebar-w: 280px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-50);
+    color: var(--gray-900);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  #sidebar-header {
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  #sidebar-header h1 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: 4px;
+  }
+
+  #sidebar-header p {
+    font-size: 11px;
+    opacity: .5;
+  }
+
+  #search-wrap {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #search {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    color: #fff;
+    padding: 7px 10px;
+    font-size: 12px;
+    outline: none;
+  }
+
+  #search::placeholder { color: rgba(255,255,255,0.4); }
+  #search:focus { border-color: var(--teal); background: rgba(255,255,255,0.15); }
+
+  #site-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 0;
+  }
+
+  .site-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding: 10px 16px 4px;
+  }
+
+  .site-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background .15s;
+    border-left: 3px solid transparent;
+  }
+
+  .site-item:hover { background: rgba(255,255,255,0.07); }
+
+  .site-item.active {
+    background: rgba(0,163,173,0.2);
+    border-left-color: var(--teal);
+  }
+
+  .site-item .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .site-item .site-name {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .site-item .page-count {
+    font-size: 10px;
+    opacity: .5;
+    background: rgba(255,255,255,0.1);
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+
+  /* ── MAIN ── */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  #site-badge {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  #site-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+  #site-url { font-size: 12px; color: var(--gray-600); margin-top: 1px; }
+
+  #topbar-meta {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .meta-chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid currentColor;
+  }
+
+  #expand-all, #collapse-all {
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    background: #fff;
+    cursor: pointer;
+    color: var(--gray-800);
+    transition: background .15s;
+  }
+  #expand-all:hover, #collapse-all:hover { background: var(--gray-100); }
+
+  #content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px;
+  }
+
+  /* ── OVERVIEW GRID ── */
+  #overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .overview-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: box-shadow .2s, transform .15s;
+    border-top: 3px solid transparent;
+  }
+
+  .overview-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    transform: translateY(-2px);
+  }
+
+  .overview-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .overview-card .card-url { font-size: 10px; color: var(--gray-600); margin-bottom: 10px; }
+
+  .card-stats { display: flex; gap: 8px; margin-bottom: 10px; }
+  .card-stat {
+    font-size: 10px;
+    background: var(--gray-100);
+    padding: 3px 7px;
+    border-radius: 4px;
+    color: var(--gray-800);
+  }
+
+  .card-top-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .nav-pill {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: var(--gray-100);
+    color: var(--gray-800);
+  }
+
+  /* ── SEARCH RESULTS ── */
+  .search-no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-600);
+    font-size: 14px;
+  }
+  .search-group { margin-bottom: 28px; }
+  .search-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .search-group-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-900);
+    cursor: pointer;
+  }
+  .search-group-name:hover { text-decoration: underline; }
+  .search-group-url {
+    font-size: 11px;
+    color: var(--gray-600);
+  }
+  .search-hit {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .search-hit:hover { background: var(--gray-100); }
+  .search-hit-path {
+    font-size: 11px;
+    color: var(--gray-600);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .search-hit mark {
+    background: #fff3cd;
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+  .search-summary {
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-bottom: 20px;
+  }
+
+  /* ── TREE VIEW ── */
+  #tree-view { display: none; }
+
+  .tree-root {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .tree-root-header {
+    padding: 14px 20px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 12px;
+    color: var(--gray-600);
+    display: flex;
+    gap: 16px;
+  }
+
+  .tree-body { padding: 12px 0; }
+
+  .tree-node { user-select: none; }
+
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 3px 0;
+    cursor: pointer;
+    transition: background .1s;
+  }
+
+  .tree-row:hover { background: var(--gray-50); }
+
+  .tree-indent { flex-shrink: 0; width: 20px; }
+
+  .tree-toggle {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+    color: var(--gray-400);
+    transition: transform .2s;
+  }
+
+  .tree-toggle.open { transform: rotate(90deg); }
+  .tree-toggle.leaf { color: transparent; cursor: default; }
+
+  .tree-icon {
+    font-size: 13px;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  .tree-label {
+    font-size: 13px;
+    color: var(--gray-800);
+    flex: 1;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .tree-label.depth-0 {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gray-900);
+  }
+
+  .tree-label.depth-1 {
+    font-weight: 600;
+    color: var(--gray-900);
+    font-size: 13px;
+  }
+
+  .tree-tag {
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 8px;
+    margin-right: 8px;
+    font-family: var(--font);
+  }
+
+  .tag-section { background: #e8f0fe; color: #1a73e8; }
+  .tag-pdf { background: #fce8e6; color: #d93025; }
+  .tag-tool { background: #e6f4ea; color: #188038; }
+  .tag-content { background: #fef9e1; color: #b06000; }
+  .tag-program { background: #f3e8fd; color: #7627bb; }
+
+  .tree-children { display: none; }
+  .tree-children.open { display: block; }
+
+  .child-count {
+    font-size: 10px;
+    color: var(--gray-400);
+    margin-right: 8px;
+    font-family: var(--font);
+  }
+
+  /* category colors */
+  .cat-flagship  { color: #003087; }
+  .cat-major     { color: #1a73e8; }
+  .cat-pediatric { color: #188038; }
+  .cat-research  { color: #7627bb; }
+  .cat-community { color: #1a73e8; }
+  .cat-behavioral{ color: #1a73e8; }
+  .cat-content   { color: #00a3ad; }
+
+  .dot.cat-flagship  { background: #fff; }
+  .dot.cat-major     { background: #1a73e8; }
+  .dot.cat-pediatric { background: #188038; }
+  .dot.cat-research  { background: #7627bb; }
+  .dot.cat-community { background: #1a73e8; }
+  .dot.cat-behavioral{ background: #1a73e8; }
+  .dot.cat-content   { background: #00a3ad; }
+
+  .meta-chip.cat-flagship  { color: #003087; border-color: #003087; background: #e8f0fe; }
+  .meta-chip.cat-major     { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
+  .meta-chip.cat-pediatric { color: #188038; border-color: #188038; background: #e6f4ea; }
+  .meta-chip.cat-research  { color: #7627bb; border-color: #7627bb; background: #f3e8fd; }
+  .meta-chip.cat-community { color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
+  .meta-chip.cat-behavioral{ color: #1a73e8; border-color: #1a73e8; background: #e8f0fe; }
+  .meta-chip.cat-content   { color: #008c96; border-color: #008c96; background: #e6f7f8; }
+
+  #site-badge.cat-flagship  { background: #003087; }
+  #site-badge.cat-major     { background: #1a73e8; }
+  #site-badge.cat-pediatric { background: #188038; }
+  #site-badge.cat-research  { background: #7627bb; }
+  #site-badge.cat-community { background: #1a73e8; }
+  #site-badge.cat-behavioral{ background: #1a73e8; }
+  #site-badge.cat-content   { background: #008c96; }
+
+  .overview-card.cat-flagship  { border-top-color: #003087; }
+  .overview-card.cat-major     { border-top-color: #1a73e8; }
+  .overview-card.cat-pediatric { border-top-color: #188038; }
+  .overview-card.cat-research  { border-top-color: #7627bb; }
+  .overview-card.cat-community { border-top-color: #1a73e8; }
+  .overview-card.cat-behavioral{ border-top-color: #1a73e8; }
+  .overview-card.cat-content   { border-top-color: #008c96; }
+
+  #back-btn {
+    display: none;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    background: #fff;
+    cursor: pointer;
+    color: var(--gray-800);
+    align-items: center;
+    gap: 4px;
+  }
+
+  #back-btn:hover { background: var(--gray-100); }
+
+  .overview-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--gray-900);
+  }
+
+  .overview-subtitle {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 20px;
+  }
+
+  .group-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin: 20px 0 8px;
+    grid-column: 1 / -1;
+  }
+
+  .group-title:first-child { margin-top: 0; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div id="auth-overlay" style="
+  position:fixed;inset:0;z-index:9999;
+  background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+">
+  <div style="
+    background:#fff;border-radius:14px;padding:40px 48px;
+    width:340px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.3);
+  ">
+    <div style="font-size:28px;margin-bottom:8px">🏥</div>
+    <h2 style="font-size:17px;font-weight:700;color:#003087;margin-bottom:4px">Northwell Health</h2>
+    <p style="font-size:12px;color:#80868b;margin-bottom:24px">Site IA Explorer — Enter password to continue</p>
+    <input id="auth-input" type="password" placeholder="Password" style="
+      width:100%;padding:10px 14px;border:1px solid #dadce0;border-radius:8px;
+      font-size:14px;outline:none;margin-bottom:8px;box-sizing:border-box;
+    " onkeydown="if(event.key==='Enter')checkAuth()">
+    <div id="auth-error" style="font-size:12px;color:#c62828;min-height:18px;margin-bottom:8px"></div>
+    <button onclick="checkAuth()" style="
+      width:100%;padding:11px;background:#003087;color:#fff;
+      border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
+    ">Continue</button>
+  </div>
+</div>
+
+<script>
+function checkAuth() {
+  const input = document.getElementById('auth-input');
+  if (input.value === 'constellation2026') {
+    document.getElementById('auth-overlay').style.display = 'none';
+    input.value = '';
+  } else {
+    document.getElementById('auth-error').textContent = 'Incorrect password. Please try again.';
+    input.value = '';
+    input.focus();
+  }
+}
+document.getElementById('auth-input').focus();
+</script>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h1>Northwell Health</h1>
+    <p>22 sites · Site IA Explorer</p>
+  </div>
+  <div id="search-wrap">
+    <input type="text" id="search" placeholder="Search sites & pages…">
+  </div>
+  <div id="site-list">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <button id="back-btn" onclick="showOverview()">← All Sites</button>
+    <div id="site-badge"></div>
+    <div>
+      <div id="site-title">All Sites</div>
+      <div id="site-url">northwell.edu network</div>
+    </div>
+    <div id="topbar-meta">
+      <span id="cat-chip" class="meta-chip" style="display:none"></span>
+      <button id="expand-all" onclick="expandAll()" style="display:none">Expand All</button>
+      <button id="collapse-all" onclick="collapseAll()" style="display:none">Collapse All</button>
+    </div>
+  </div>
+  <div id="content">
+    <div id="overview-view">
+      <div class="overview-title">Northwell Health — Site Network</div>
+      <div class="overview-subtitle">22 sites · Click any card to explore the full IA</div>
+      <div id="overview-grid"></div>
+    </div>
+    <div id="tree-view"></div>
+    <div id="search-view" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const CATS = {
+  flagship:  { label: 'Root Site',       group: 'Root Site' },
+  major:     { label: 'Hospital',        group: 'Hospitals' },
+  pediatric: { label: 'Pediatric',       group: 'Pediatric Ecosystem' },
+  research:  { label: 'Research / Professional', group: 'Research & Professional' },
+  community: { label: 'Hospital',        group: 'Hospitals' },
+  behavioral:{ label: 'Hospital',          group: 'Hospitals' },
+  content:   { label: 'Content Brand',   group: 'Content' },
+};
+
+// Tree node helper: n(label, tag, ...children)
+const n = (label, tag, ...children) => ({ label, tag: tag||null, children });
+const l = (label, tag) => ({ label, tag: tag||null, children: [] }); // leaf
+
+const SITES = [
+  {
+    id: 'northwell',
+    name: 'Northwell Health',
+    abbr: 'NW',
+    url: 'www.northwell.edu',
+    pages: 520,
+    cat: 'flagship',
+    topNav: ['Find & Book Care','Locations','Areas of Care','Pay a Bill','Patient Portal','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section',
+          l('/find-a-doctor'),
+          l('/make-an-appointment-interstitial'),
+          l('/[specialty search queries — 12 pre-built]','tool')
+        ),
+        n('/doctors-and-care','section',
+          l('/locations'),
+          l('/at-home')
+        ),
+        l('/wait-times','tool'),
+        n('/areas-of-care','section',
+          n('/caregivers','program', l('/locations'),l('/education'),l('/support-group'),l('/resources')),
+          n('/community-health-wellness','program', l('/programs'),l('/events'),l('/community-service-plans')),
+          l('/hospice-care')
+        ),
+        n('/[30 clinical specialties]','section',
+          n('/behavioral-health','section', l('/programs-services'),l('/addiction-services'),l('/locations')),
+          n('/eye-institute','section', l('/specialties [9]'),l('/find-a-doctor'),l('/locations')),
+          n('/imaging','section', l('/services [20 imaging types]'),l('/specialties'),l('/locations')),
+          n('/neurosciences','section', l('/conditions'),l('/treatments'),l('/our-centers [9]'),l('/locations')),
+          n('/obstetrics-and-gynecology','section',
+            l('/gynecology'), l('/obstetrics'),
+            n('/fertility','section', l('/services [IVF, egg freezing…]'),l('/find-a-doctor'),l('/patient-testimonials'))
+          ),
+          n('/orthopaedic-institute','section', l('/specialties [6]'),l('/find-care'),l('/events'),l('/clinical-trials')),
+          n('/katz-institute-for-womens-health','section', l('/programs-services'),l('/events'),l('/locations')),
+          n('/otolaryngology','section', l('/programs-services [9]'),l('/find-a-doctor'),l('/locations')),
+          n('/plastic-surgery','section', l('/procedures'),l('/expert-insights'),l('/locations')),
+          l('/anesthesiology'), l('/center-for-bioelectronic-medicine'),
+          l('/dental-medicine'), l('/dermatology'), l('/emergency-medicine'),
+          l('/endocrinology-diabetes-metabolism'), l('/family-medicine'),
+          l('/nephrology'), l('/primary-care'), l('/rehabilitation-network'),
+          l('/rheumatology'), l('/robotic-surgery'), l('/surgery'),
+          l('/telehealth'), l('/urology'), l('/thoracic-surgery')
+        ),
+        n('/manage-your-care','section',
+          l('/billpay'), l('/patient-portal → /mynorthwell, /doctor-direct'),
+          l('/medical-records'), l('/insurance')
+        ),
+        n('/billing-and-insurance','section',
+          l('/price-estimator-tools'), l('/financial-assistance-programs-policies')
+        ),
+        n('/help','section', l('/billing [FAQs]'),l('/insurance [FAQs]'),l('/caregiver-access'),l('/appointments'),l('/telehealth')),
+        n('/about-northwell','section',
+          l('/contact-us → /patient-relations'), l('/volunteer'),
+          l('/financial-health-annual-reports'), l('/commitment-to-excellence'),l('/vendor-inquiries')
+        ),
+        n('/news','section',
+          l('/the-latest [~40 articles]'), l('/insights [long-form]'),
+          l('/a-z'), l('/speakers-bureau'), l('/podcasts'), l('/publications'), l('/media-contacts')
+        ),
+        n('/physician-partners','section', l('/locations'),l('/programs-services'),l('/leadership'),l('/awards')),
+        l('/patient-testimonials'),
+        n('/center-for-emergency-medical-services','section',
+          l('/communications-center'), l('/skyhealth'), l('/ambulances'), l('/patient-transfer-center')
+        ),
+        n('/privacy-policies-disclaimers','section', l('/disclaimer'),l('/privacy-policy'),l('/terms-of-service'))
+      )
+    ]
+  },
+  {
+    id: 'pediatrics',
+    name: 'Pediatrics',
+    abbr: 'PD',
+    url: 'pediatrics.northwell.edu',
+    pages: 497,
+    cat: 'pediatric',
+    topNav: ['Find a Doctor','Locations','Areas of Care','Research','About Us'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        n('/find-care','section', l('/locations')),
+        n('/departments-services','section',
+          n('/adolescent-medicine','section',
+            n('/programs-services','program', l('/adolescent-reproductive-health'),l('/adolescent-bariatric-surgery'),l('/eating-disorders-center')),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/for-professionals'), l('/about-us')
+          ),
+          n('/behavioral-health-centers','section', l('/community-resources')),
+          n('/pediatric-gastroenterology','section',
+            n('/programs-services','program', l('/celiac-disease'),l('/endoscopy-suite'),l('/liver-disease'),l('/atherosclerosis-prevention')),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/about-us')
+          ),
+          n('/pediatric-hematology-oncology','section',
+            n('/programs-services','program',
+              l('/bone-marrow-failure'), l('/brain-spinal-cord-tumor-center'),
+              l('/hemoglobinopathy'), l('/developmental-therapeutics'),
+              l('/leukemia-lymphoma'), l('/hemostasis-thrombosis'),
+              l('/stem-cell-transplantation'), l('/supportive-care'),
+              l('/survivors-facing-forward'), l('/cancer-genetics-genomics'),
+              l('/rare-tumors-sarcoma'), l('/vascular-anomalies')
+            ),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/about-us → /meet-the-team'),
+            l('/patient-testimonials [3 stories]','content')
+          ),
+          n('/heart-center','section',
+            n('/pediatric-cardiology','section',
+              n('/programs-services','program',
+                l('/cardiac-ct'), l('/cardiac-mri'), l('/cardiac-catheterization'),
+                l('/fetal-cardiology'), l('/arrhythmia-services'),
+                l('/pulmonary-hypertension'), l('/marfan-syndrome'),
+                l('/preventive-cardiology'), l('/mis-c-covid-cardiac')
+              ),
+              n('/find-care','section', l('/conditions [AVC, HLHS, TOF, TGA, WPW…]'), l('/treatments [ablation, TAVR, pacemakers…]')),
+              n('/find-care/find-a-doctor','section'), l('/research'), l('/about-us')
+            ),
+            n('/pediatric-congenital-heart-surgery','section',
+              n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+              l('/programs-services'), l('/research'), l('/about-us')
+            )
+          ),
+          n('/pediatric-neurology','section',
+            n('/programs-services','program', l('/ADHD'), l('/epilepsy-center'), l('/concussion-center'), l('/headache'), l('/neuromuscular'), l('/sleep-medicine')),
+            n('/find-care','section',
+              l('/conditions [autism, birth defects, seizures…]'),
+              l('/treatments [ketogenic diet, VNS, focal resection…]'),
+              l('/find-a-doctor'), l('/locations')
+            ),
+            l('/research'), l('/about-us'), l('/patient-testimonials [2]','content')
+          ),
+          n('/pediatric-neurosurgery','section',
+            n('/find-care','section',
+              l('/conditions [brain tumors, Chiari, hydrocephalus, craniosynostosis…]'),
+              l('/treatments [ROSA robot, endoscopic, craniofacial recon…]'),
+              l('/find-a-doctor'), l('/locations')
+            ),
+            l('/research'), l('/about-us'), l('/contact-us'), l('/patient-testimonials [4]','content')
+          ),
+          n('/pediatric-orthopaedics','section',
+            n('/find-care','section',
+              l('/conditions [scoliosis, ACL, cerebral palsy, dysplastic hips, limb deformities…]'),
+              l('/treatments [MAGEC rods, EOS imaging, hip arthroscopy, Precice nail…]'),
+              l('/find-a-doctor'), l('/locations')
+            ),
+            l('/research'), l('/about-us'), l('/patient-testimonials [4]','content')
+          ),
+          n('/pediatric-plastic-craniofacial-surgery','section',
+            n('/programs-services','program',
+              l('/center-for-birthmarks-cysts-tumors'), l('/center-for-cleft-lip-palate'),
+              l('/center-for-craniosynostosis'), l('/center-for-facial-paralysis'),
+              l('/center-for-hemifacial-microsomia'), l('/center-for-hand-anomalies'),
+              l('/center-for-breast-surgery'), l('/center-for-facial-reconstruction')
+            ),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/for-professionals')
+          ),
+          n('/pediatric-allergy-and-immunology','section',
+            n('/programs-services','program', l('/center-for-childhood-asthma'), l('/food-allergy-center'), l('/drug-allergy-center'), l('/hay-fever'), l('/HIV-center')),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/for-professionals'), l('/about-us')
+          ),
+          n('/pediatric-infectious-diseases','section',
+            n('/programs-services','program', l('/Lyme-disease-center'), l('/home-IV-antibiotic-therapy'), l('/travel-medicine')),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/for-professionals'), l('/about-us')
+          ),
+          n('/neonatology','section',
+            n('/programs-services','program', l('/center-for-neonatal-nutrition'), l('/comprehensive-neonatal-follow-up'), l('/point-of-care-ultrasound'), l('/whole-body-hypothermia')),
+            l('/find-a-doctor'), l('/research'), l('/about-us')
+          ),
+          n('/pediatric-general-surgery','section',
+            n('/programs-services','program',
+              l('/colorectal-pelvic-reconstruction'), l('/IBD'), l('/neonatal-congenital'),
+              l('/oncologic-surgery'), l('/thoracic'), l('/CARE-team [airway]'),
+              l('/extracorporeal-life-support'), l('/PILO-center'), l('/intestinal-rehab')
+            ),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/about-us')
+          ),
+          n('/pediatric-pulmonology','section',
+            n('/programs-services','program', l('/cystic-fibrosis-center'), l('/project-breathe')),
+            n('/find-care','section', l('/find-a-doctor'),l('/locations')),
+            l('/research'), l('/about-us'), l('/patient-testimonials [3]','content')
+          ),
+          l('/pediatric-nephrology-kidney-transplantation'),
+          l('/pediatric-ophthalmology'),
+          l('/pediatric-urology'),
+          l('/pediatric-endocrinology-diabetes'),
+          l('/general-pediatrics'),
+          l('/pediatric-hospital-medicine'),
+          l('/pediatric-otolaryngology'),
+          l('/pediatric-rheumatology'),
+          l('/pediatric-radiology')
+        ),
+        l('/research'),
+        l('/about-us'),
+        l('/patient-testimonials [~20 stories]','content'),
+        l('/choosing-a-pediatrician')
+      )
+    ]
+  },
+  {
+    id: 'childrens',
+    name: "Children's Hospital",
+    abbr: 'CH',
+    url: 'childrenshospital.northwell.edu',
+    pages: 67,
+    cat: 'pediatric',
+    topNav: ['Find Care','Patients & Families','Get Involved','Billing','Log In'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/planning-your-visit'), l('/visit-or-contact-a-patient'), l('/while-youre-here'),
+          n('/child-life-seacrest-studios','section', l('/internship-application')),
+          l('/center-for-hope'), l('/chaplaincy-services'), l('/sibling-support'),
+          l('/social-work'), l('/student-support'), l('/therapeutic-services'),
+          l('/child-life-art-therapy-program'), l('/amenities'), l('/getting-here'), l('/patient-relations')
+        ),
+        n('/departments-services','section',
+          n('/pediatric-emergency-medicine','section',
+            l('/pediatric-urgent-care','program'), l('/emergency-behavioral-health','program')
+          ),
+          n('/pediatric-trauma-center','section',
+            l('/find-a-doctor'), l('/programs-initiatives'), l('/for-professionals'), l('/about-us')
+          ),
+          l('/pediatric-anesthesiology'),
+          n('/pediatric-intensive-care-unit','section',
+            n('/programs-services','program',
+              l('/acute-respiratory-failure'), l('/cardiac-ICU'), l('/continuous-renal-replacement'),
+              l('/extracorporeal-life-support'), l('/high-frequency-ventilation'),
+              l('/sepsis-septic-shock'), l('/ventricular-assist-device')
+            ),
+            l('/find-a-doctor'), l('/research'), l('/about-us')
+          ),
+          l('/pediatric-neonatal-critical-care-transport')
+        ),
+        l('/rsv-resource-center'),
+        n('/get-involved','section',
+          l('/volunteer-opportunities'), l('/child-life-events')
+        ),
+        n('/for-professionals','section', l('/child-life-internship-program')),
+        n('/about-us','section',
+          n('/community-outreach','section',
+            l('/building-leaders-in-schools'), l('/stopping-bullying'), l('/injury-prevention'),
+            l('/safe-sitter-essentials'), l('/school-nutrition-programs'), l('/school-health-wellness'), l('/school-nurse-education')
+          )
+        ),
+        l('/newsroom → /the-latest, /insights','content')
+      )
+    ]
+  },
+  {
+    id: 'feinstein',
+    name: 'Feinstein Institutes',
+    abbr: 'FI',
+    url: 'feinstein.northwell.edu',
+    pages: 680,
+    cat: 'research',
+    topNav: ['Institutes & Researchers','Clinical Trials','Education','Events','For Professionals','Journals'],
+    tree: [
+      n('/ Home','',
+        n('/institutes-researchers','section',
+          l('/institute-behavioral-science'), l('/bioelectronic-medicine'),
+          l('/institute-cancer-research'), l('/institute-health-system-science'),
+          l('/institute-molecular-medicine'), l('/institute-translational-research'),
+          l('/our-researchers [~200 individual profiles]','content'),
+          l('/researchers-by-institute')
+        ),
+        n('/education','section',
+          l('/summer-student-intern-program'), l('/visiting-scientists-and-scholars')
+        ),
+        n('/for-professionals','section',
+          l('/office-research-training-events'), l('/animal-welfare-office-iacuc-ibc'),
+          l('/biostatistics-unit'), l('/clinical-trials-office'), l('/grants-management-office'),
+          n('/human-research-protection-program','section',
+            l('/irb-submission-instructions'), l('/protocol-consent-form-templates'),
+            l('/tools-guidance-clinical-research'), l('/maintenance-documents')
+          ),
+          l('/office-clinical-research'), l('/office-technology-transfer'),
+          l('/office-research-compliance'), l('/research-safety-office'),
+          l('/scientific-cores'), l('/quantitative-intelligence'),
+          l('/center-comparative-physiology'), l('/feinstein-institutes-appointments')
+        ),
+        l('/events'),
+        l('/journals'),
+        l('/medical-marvels'),
+        n('/news','section',
+          l('/the-latest [~60 articles]','content'), l('/insights [long-form features]','content')
+        ),
+        n('/about-us','section', l('/newsroom'), l('/awards')),
+        l('/sites/ [~60 PDF downloads: IBC minutes, research forms, templates]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'professionals',
+    name: 'For Professionals',
+    abbr: 'PR',
+    url: 'professionals.northwell.edu',
+    pages: 118,
+    cat: 'research',
+    topNav: ['Nursing','Advanced Clinical Providers','Pharmacy','Professional Development'],
+    tree: [
+      n('/ Home','',
+        n('/nursing','section',
+          n('/institute-for-nursing','section',
+            l('/orientation-program'), l('/clinical-placement'), l('/placement'), l('/research-ebp')
+          ),
+          l('/our-facilities [14 hospital pages]'),
+          n('/continuing-professional-education','section', l('/alumnea-association-lenox-hill-school-of-nursing')),
+          n('/continuing-professional-programs','section',
+            l('/fellowship-critical-care-nursing'), l('/fellowship-ED-nursing'), l('/fellowship-pediatric-nursing')
+          )
+        ),
+        l('/advanced-clinical-providers'),
+        n('/pharmacy','section',
+          l('/education-training'),
+          n('/pharmacy-education','section',
+            l('/pgy2-oncology-pharmacy-residency'), l('/pbmc-pgy1-pharmacy-residency'),
+            l('/pgy2-ambulatory-care-residency'), l('/pgy2-infectious-diseases-residency'),
+            l('/ccmc-pgy2-pediatric-residency'), l('/pgy2-pharmacy-admin-leadership'),
+            l('/critical-care-residency-nsuh'), l('/residency-huntington'),  l('/residency-glencove')
+          )
+        ),
+        n('/professional-development','section',
+          n('/center-for-learning-innovation','section',
+            n('/programs-services','section',
+              l('/innovation'), l('/allied-health-education'), l('/simulation-surgical-education'),
+              l('/leadership-development-program'),
+              n('/bioskills-education-center','section', l('/bioskills-external-registration'), l('/bioskills-internal-registration')),
+              l('/patient-safety-institute'), l('/executive-leadership-development'),
+              n('/physician-leadership-institute','section', l('/physician-administrative-fellowship')),
+              l('/improvement-sciences → /course-list'),
+              n('/school-of-diagnostic-medical-sonography','section'),
+              n('/school-of-radiologic-technology-pbmc','section',
+                l('/admissions'), l('/curriculum'), l('/policies'), l('/student-services'), l('/tuition-fees')
+              ),
+              l('/chief-resident-education-program')
+            )
+          ),
+          n('/continuing-professional-education','section',
+            l('/clinical-pastoral-education'), l('/dietetic-internship'),
+            l('/doctoral-psychology-internship-siuh'),
+            l('/fellowship-advanced-female-pelvic-surgery-ssuh'),
+            n('/internship-psychology-lenox-hill','section',
+              l('/program-information'), l('/application-process'), l('/about-us')
+            ),
+            l('/psychology-training-program-zucker-hillside')
+          )
+        ),
+        l('/continuing-professional-education/continuing-medical-education'),
+        l('/sites/ [PDF: placement forms, magnet notices, handbooks]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'glencove',
+    name: 'Glen Cove Hospital',
+    abbr: 'GC',
+    url: 'glencove.northwell.edu',
+    pages: 51,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section', l('/cancer-services'), l('/find-a-doctor [by specialty]','tool')),
+        n('/your-visit','section', l('/about-your-room')),
+        l('/patient-information'), l('/get-involved'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        l('/katz-womens-surgical-care'),
+        n('/rehabilitation-services','section',
+          l('/physical-medicine-rehabilitation'), l('/acute-inpatient-rehabilitation'),
+          l('/patient-testimonials [3]','content')
+        ),
+        l('/ambulatory-surgery'), l('/womens-hereditary-cancer'),
+        l('/emergency-department'), l('/division-gastroenterology'),
+        l('/palliative-care'), l('/hernia-center'), l('/breast-surgery'),
+        l('/patient-testimonials [4]','content'),
+        l('/sites/ [PDFs: financial counseling, organ donation]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'huntington',
+    name: 'Huntington Hospital',
+    abbr: 'HH',
+    url: 'huntington.northwell.edu',
+    pages: 51,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section'),
+        n('/your-visit','section',
+          l('/hospital-information'), l('/reichert-family-caregiver-center'),
+          l('/your-care-partners'), l('/about-your-room'), l('/patient-relations'), l('/checking-out-discharge')
+        ),
+        n('/patient-information','section', l('/types-of-insurance')),
+        l('/get-involved'), l('/about'), l('/contact-us'),
+        l('/newsroom → /the-latest, /insights, /search','content'),
+        l('/neurosurgery'),
+        n('/orthopedics','section',
+          n('/programs-services','section',
+            l('/foot-ankle'), l('/hand-wrist'), l('/joint-replacement'),
+            l('/shoulder-elbow'), l('/sports-medicine'), l('/spine-care'), l('/trauma-fractures')
+          ),
+          l('/find-a-doctor'), l('/contact-us')
+        ),
+        l('/bariatric-surgery'), l('/cardiology'), l('/emergency-department'),
+        l('/palliative-care'), l('/hernia-center'),
+        n('/obgyn','section', l('/find-a-doctor'), l('/locations')),
+        l('/thoracic-surgery'), l('/urology'), l('/womens-services'), l('/wound-care-center'),
+        l('/sites/ [PDFs: volunteer app, DAISY award, patient menus, joint guide]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'lenoxhill',
+    name: 'Lenox Hill Hospital',
+    abbr: 'LH',
+    url: 'lenoxhill.northwell.edu',
+    pages: 407,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom','Events'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/hospital-information'), l('/patient-experience'), l('/greetings-program'),
+          l('/types-of-insurance'), l('/your-care-partners'), l('/about-your-room')
+        ),
+        l('/find-care'), l('/find-a-doctor','tool'),
+        l('/patient-information'), l('/get-involved'), l('/about'), l('/contact-us'), l('/events'),
+        l('/newsroom → /the-latest','content'),
+        n('/lenox-hill-heart-lung','section',
+          n('/cardiology','section',
+            n('/find-care','section', l('/conditions'), l('/treatments')),
+            l('/find-a-doctor'), l('/adult-congenital-heart-program'), l('/womens-heart-program'),
+            l('/patient-family-support'), l('/about-us'), l('/contact-us'),
+            l('/patient-testimonials [3]','content')
+          ),
+          n('/cardiac-surgery','section',
+            n('/find-care','section', l('/conditions'), l('/treatments [CABG, aortic dissection…]')),
+            l('/find-a-doctor'), l('/patient-family-support'), l('/about-us'), l('/contact-us')
+          ),
+          n('/thoracic-surgery','section',
+            l('/find-a-doctor'), l('/find-care/treatments [robotic tracheobronchoplasty…]')
+          )
+        ),
+        n('/cancer-institute','section', l('/radiation-medicine'), l('/patient-testimonials','content')),
+        l('/breast-cancer-program'),
+        n('/orthopedics','section',
+          n('/programs-services','section', l('/podiatry')),
+          n('/find-a-doctor','section', l('/foot-ankle'),l('/hand-wrist'),l('/joint-replacement'),l('/pediatrics'),l('/shoulder-elbow'),l('/spine-care'),l('/sports-medicine')),
+          l('/about-us'), l('/contact-us')
+        ),
+        n('/neurosurgery','section',
+          l('/lenox-hill-spine'), l('/brain-tumor-center → /brain-tumor-biotech-center'),
+          l('/center-for-pituitary-and-neuroendocrine-disorders'),
+          l('/center-for-cerebrovascular-and-neuroendovascular-surgery'),
+          l('/gamma-knife'), l('/neuroplastic-and-reconstructive-surgery'),
+          l('/meningioma-program'), l('/vestibular-schwannoma-program'),
+          l('/vascular-malformations-head-neck'), l('/hydrocephalus-care'),
+          l('/neuro-critical-care'),
+          l('/find-a-doctor'), l('/for-patients'), l('/research-clinical-trials'), l('/about-us'), l('/contact'),
+          l('/patient-testimonials [6]','content')
+        ),
+        n('/otolaryngology','section',
+          l('/programs-services'), l('/locations'), l('/contact-us'),
+          l('/find-a-doctor [11 sub-specialties]','tool')
+        ),
+        n('/neurology','section',
+          n('/centers','section',
+            l('/autoimmune-brain-disorder-encephalitis'), l('/epilepsy-center'),
+            l('/nerve-muscle-disorder'), l('/stroke-center'), l('/multiple-sclerosis-center')
+          ),
+          l('/about-us'), l('/locations')
+        ),
+        n('/pediatrics','section',
+          l('/inpatient-pediatrics'), l('/newborn-nursery'),
+          l('/neonatal-intensive-care-unit'), l('/for-new-parents')
+        ),
+        n('/obgyn','section',
+          n('/obstetrics','section', l('/center-for-family-education'))
+        ),
+        n('/urology','section',
+          n('/specialties','section',
+            l('/pelvic-medicine-reconstructive'), l('/kidney-stones'), l('/urologic-cancers'),
+            l('/prostate-cancer'), l('/mens-sexual-reproductive'), l('/BPH'), l('/mens-urinary'), l('/urethra-trauma')
+          ),
+          l('/find-a-doctor')
+        ),
+        n('/surgery','section', l('/bariatric-surgery'), l('/colon-rectal-surgery'), l('/plastic-surgery'), l('/vascular-surgery')),
+        l('/gastroenterology'), l('/endocrinology-and-metabolism'), l('/interventional-radiology'),
+        l('/nephrology'), l('/outpatient-nutrition-program'), l('/pulmonary-medicine → /copd-clinic'),
+        l('/radiology'), l('/advanced-head-neck-reconstruction'),
+        l('/gerald-friedman-transgender-health-wellness-program'),
+        l('/patient-testimonials [~15]','content'),
+        l('/sites/ [PDFs: newborn guides, maternity forms, breastfeeding, cardiac surgery]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'foresthills',
+    name: 'LIJ Forest Hills',
+    abbr: 'FH',
+    url: 'foresthills.northwell.edu',
+    pages: 31,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section', l('/medicine'), l('/podiatry')),
+        l('/find-a-doctor','tool'),
+        n('/your-visit','section', l('/about-your-room')),
+        l('/patient-information'), l('/get-involved'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        n('/obstetrics-maternity-care','section', l('/find-a-doctor'), l('/locations')),
+        n('/general-surgery','section', l('/robotic-surgery')),
+        l('/urology'), l('/vascular-surgery-department'), l('/bariatric-surgery-department'),
+        l('/cardiology'), l('/emergency-department'), l('/gastroenterology'),
+        l('/palliative-care'), l('/imaging-center'),
+        l('/sites/ [PDFs: volunteer app, appointment forms]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'lij',
+    name: 'LIJ Medical Center',
+    abbr: 'LJ',
+    url: 'lij.northwell.edu',
+    pages: 99,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom','Events'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/hospital-information'), l('/serenity-family-caregiver-program'), l('/types-of-insurance')
+        ),
+        l('/find-care'), l('/get-involved'), l('/about'), l('/contact-us'), l('/events'),
+        l('/newsroom → /the-latest','content'),
+        n('/obgyn','section',
+          l('/katz-womens-hospital'),
+          n('/programs-services','section',
+            l('/gynecologic-oncology'), l('/center-for-cancer-pregnancy-reproduction'),
+            l('/reproductive-endocrinology-and-infertility'), l('/gynecology'),
+            l('/maternal-fetal-medicine'), l('/minimally-invasive-gynecologic-surgery'),
+            l('/obstetrics'), l('/robotic-surgery'), l('/urogynecology')
+          ),
+          l('/find-a-doctor'), l('/leadership'), l('/locations')
+        ),
+        n('/thoracic-surgery','section',
+          l('/find-a-doctor'), l('/about-us'), l('/contact-us'),
+          l('/find-care/treatments [bronchoscopic lung volume reduction]'),
+          l('/patient-testimonials [3]','content')
+        ),
+        n('/cancer','section', l('/lung-cancer'), l('/gynecologic-cancer')),
+        n('/vascular-surgery','section',
+          l('/limb-preservation-program'), l('/carotid-artery-program'),
+          l('/research-clinical-trials'), l('/additional-services')
+        ),
+        n('/neurology','section', l('/comprehensive-epilepsy-center')),
+        l('/bariatric-surgery'), l('/cardiology'), l('/colorectal-surgery'),
+        l('/otolaryngology'), l('/palliative-care'), l('/neurosurgery'),
+        l('/orthopedics'), l('/surgery'), l('/urology'), l('/breast-surgery'), l('/head-neck-surgery'),
+        l('/emergency-department'),
+        l('/patient-testimonials [5]','content'),
+        l('/sites/ [PDFs: patient rights, BMT HEIA, volunteer app]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'valleystream',
+    name: 'Valley Stream',
+    abbr: 'VS',
+    url: 'valleystream.northwell.edu',
+    pages: 40,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section'),
+        n('/your-visit','section', l('/about-your-room')),
+        l('/patient-information'), l('/get-involved'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        n('/orthopedic-hospital','section',
+          n('/programs-services','section',
+            l('/hand-wrist'), l('/joint-replacement'), l('/shoulder-elbow'),
+            l('/spine-care'), l('/sports-medicine'), l('/trauma-fractures'), l('/foot-ankle')
+          ),
+          l('/find-a-doctor'), l('/contact-us'), l('/patient-testimonials [2]','content')
+        ),
+        l('/hernia-surgery'), l('/urology'), l('/bariatric-surgery'),
+        l('/emergency-department'), l('/comprehensive-fibroid-care'),
+        l('/palliative-care'), l('/sleep-disorders-center'), l('/wound-care'),
+        l('/sites/ [PDFs: volunteer app, joint replacement guide]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'meeth',
+    name: 'MEETH',
+    abbr: 'ME',
+    url: 'meeth.northwell.edu',
+    pages: 21,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Get Involved','About','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section'),
+        n('/your-visit','section', l('/hospital-information')),
+        l('/get-involved'), l('/about'),
+        l('/newsroom → /the-latest, /insights','content'),
+        l('/ambulatory-surgery'), l('/ophthalmology'), l('/center-for-mental-health'),
+        l('/cancer-institute → /medical-oncology'), l('/outpatient-infusion-center'),
+        l('/orthopedics'), l('/center-for-learning-and-attention'),
+        n('/plastic-surgery-center','section',
+          l('/northwell-physician-partners-breast-surgery-at-meeth')
+        ),
+        l('/sites/ [PDFs: preparing-for-surgery FAQ]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'nsuh',
+    name: 'North Shore Univ Hospital',
+    abbr: 'NS',
+    url: 'nsuh.northwell.edu',
+    pages: 156,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom','Events'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/hospital-information'), l('/about-your-room'),
+          l('/patient-relations/individual-and-family-support'), l('/checking-out-discharge'), l('/types-of-insurance')
+        ),
+        l('/find-care'), l('/get-involved'), l('/about → /quality'),
+        l('/contact-us'), l('/events'), l('/newsroom → /the-latest, /insights, /search','content'),
+        n('/heart-hospital','section',
+          n('/find-care','section',
+            l('/conditions [aortic aneurysm, aortic valve stenosis, heart failure…]'),
+            l('/treatments [TAVR, LVAD…]')
+          ),
+          l('/find-a-doctor'), l('/valve-disease'), l('/coronary-artery-disease'),
+          l('/outcomes'), l('/for-patients'), l('/about'), l('/contact-us'),
+          l('/patient-testimonials [4]','content')
+        ),
+        l('/petrocelli-surgical-pavilion'),
+        n('/neurosurgery','section',
+          n('/centers','section',
+            l('/center-for-cerebrovascular-and-endovascular-neurosurgery'),
+            l('/comprehensive-epilepsy-center'), l('/parkinsons-disease-and-movement-disorders'),
+            l('/spine-center'), l('/skull-base-disorders'), l('/brain-tumor-center'),
+            l('/pulsatile-tinnitus-center'), l('/meningioma-program'),
+            l('/idiopathic-intracranial-hypertension-center'), l('/neurotrauma')
+          ),
+          l('/find-care'), l('/find-a-doctor'), l('/locations'), l('/expert-insights'),
+          l('/clinical-trials'), l('/about'), l('/contact-us'),
+          l('/patient-testimonials [7]','content')
+        ),
+        n('/katz-womens-hospital','section',
+          n('/obstetrics','section',
+            l('/center-for-high-risk-pregnancy'), l('/cardio-obstetrics'), l('/labor-and-delivery → /find-a-doctor')
+          ),
+          n('/gynecology','section',
+            l('/find-a-doctor'), l('/minimally-invasive-gynecologic-surgery'),
+            l('/urogynecology'), l('/family-planning')
+          )
+        ),
+        n('/transplant-institute','section'),
+        l('/cancer'), l('/orthopedics → /experts, /patient-testimonials [5]'),
+        l('/bariatric-surgery → /patient-testimonials [2]'),
+        l('/colorectal-surgery → /patient-testimonials [1]'),
+        l('/robotic-surgery'), l('/vascular-surgery'),
+        l('/high-intensity-focused-ultrasound'),
+        l('/alvin-dorothy-schwartz-ambulatory-surgery-center'),
+        l('/don-monti-bone-marrow-stem-cell-transplantation'),
+        l('/abdominal-wall-surgery'), l('/imaging-radiology → /interventional-radiology'),
+        l('/emergency-department'), l('/palliative-care'),
+        l('/sites/ [PDFs: stroke metrics, birth certificate, heart transplant FSI]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'nwh',
+    name: 'Northern Westchester',
+    abbr: 'NW',
+    url: 'nwh.northwell.edu',
+    pages: 246,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom','Expert Insights'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/quality-safety'), l('/visitation-guidelines'), l('/food-is-care'), l('/spiritual-care'),
+          l('/hospitalist-services'), l('/blood-avoidance-program'),
+          l('/ken-hamilton-caregivers-center'), l('/prepare-for-your-procedure')
+        ),
+        n('/patient-information','section', l('/patient-advocacy'), l('/patient-centered-care')),
+        l('/find-care'), l('/get-involved'), l('/contact-us'), l('/events'),
+        n('/about-us','section',
+          n('/wellness-and-prevention','section',
+            l('/center-for-healthy-living'),
+            n('/recipes','section', l('/[10 healthy recipes]','content'))
+          )
+        ),
+        l('/newsroom + /news','content'),
+        l('/expert-insights [10 articles]','content'),
+        n('/cancer-institute','section',
+          l('/how-we-treat-cancer'), l('/radiation-therapy'), l('/chemotherapy'),
+          l('/yablon-cancer-health-and-wellness-program')
+        ),
+        n('/orthopedic-spine-institute','section',
+          l('/hip'), l('/knee'), l('/shoulder'), l('/spine'), l('/foot-ankle')
+        ),
+        l('/maternity'), l('/stroke-center'),
+        n('/breast-care-center','section', l('/breast-cancer-surgery')),
+        n('/radiology','section',
+          l('/womens-imaging-center'), l('/diagnostic-interventional-angiography'),
+          l('/fallopian-tube-recanalization'), l('/hysterosalpingography'),
+          l('/radio-frequency-ablation'), l('/uterine-artery-embolization'),
+          l('/locations'), l('/contact-us')
+        ),
+        n('/plastic-surgery','section',
+          n('/procedures','section',
+            l('/panniculectomy'), l('/breast-reconstruction'), l('/gynecomastia'),
+            l('/arm-lift'), l('/BBL'), l('/thigh-lift'), l('/chin-surgery'), l('/fat-transfer'), l('/neck-lift')
+          ),
+          n('/laser-medi-spa-services','section',
+            l('/laser-liposuction-smartlipo'), l('/laser-scar-reduction'), l('/laser-stretch-mark'),
+            l('/non-surgical-skin-tightening'), l('/facials-treatments'), l('/peels')
+          ),
+          l('/about-us'), l('/contact-us')
+        ),
+        n('/radiosurgery','section', l('/gamma-knife'), l('/novalis-radiosurgery')),
+        n('/rehab','section',
+          l('/cardiac-rehabilitation'), l('/pulmonary-rehab → /pulmonary-test'),
+          l('/physical-therapy'), l('/occupational-therapy'), l('/lsvt-therapy'), l('/contact-us')
+        ),
+        n('/surgical-weight-loss','section',
+          n('/procedures','section', l('/pyloric-preservation'), l('/SIPS')),
+          l('/teens'), l('/what-to-expect'), l('/about')
+        ),
+        l('/heart'), l('/cardiovascular-services'), l('/colorectal-surgery'),
+        l('/dermatology'), l('/diabetes'), l('/emergency-department'),
+        l('/endoscopy-and-digestive-health'), l('/gynecological-surgery'),
+        l('/infusion-center'), l('/integrative-medicine'), l('/icu'),
+        l('/neurology'), l('/neurosurgery'), l('/pain-management'),
+        l('/palliative-care'), l('/pediatrics'), l('/podiatry'),
+        l('/psychiatric-services'), l('/pulmonary-medicine'),
+        l('/robotic-surgery → /conditions, /leadership'),
+        l('/sleep-center'), l('/surgery'), l('/thoracic-surgery'),
+        l('/urologic-surgery'), l('/vascular-surgery'), l('/wound-care'),
+        l('/sites/ [PDFs: patient menus, maternity menus, birth certificate, epilepsy HEIA]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'phelps',
+    name: 'Phelps Hospital',
+    abbr: 'PH',
+    url: 'phelps.northwell.edu',
+    pages: 149,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/quality-safety'), l('/hospital-information'), l('/before-you-arrive'),
+          l('/during-your-stay'), l('/advance-directives'), l('/hipaa-privacy-policy'), l('/preparing-for-surgery')
+        ),
+        n('/patient-information','section', l('/insurance')),
+        n('/get-involved','section',
+          l('/volunteer → /volunteer-application'), l('/ways-to-give → /resources'),
+          l('/hoch-center-for-emergency-education'), l('/health-wellness')
+        ),
+        l('/find-care'), l('/request-appointment','tool'), l('/about-us'), l('/contact-us'), l('/events'),
+        l('/newsroom → /the-latest, /insights, /search','content'),
+        n('/cancer-institute','section',
+          l('/medical-oncology'), l('/radiation-medicine'), l('/surgical-oncology'), l('/infusion-center'),
+          l('/support-services'), l('/health-and-wellness-cancer-program'),
+          l('/blood-cancer'), l('/breast-care-center-of-westchester'), l('/brain-cancer-and-tumors'),
+          l('/colon-and-gi-cancer'), l('/gynecological-cancer'), l('/head-neck-cancer'),
+          l('/lung-and-thoracic-cancers'), l('/prostate-urological-cancer'), l('/skin-cancer-melanoma')
+        ),
+        n('/neurosurgery','section',
+          l('/our-services'), l('/our-doctors'), l('/endovascular-neurosurgery')
+        ),
+        n('/gastroenterology','section', l('/reflux-center-of-westchester'), l('/request-appointment')),
+        n('/imaging-radiology','section', l('/mri'), l('/mammography'), l('/pet-ct-scan'), l('/interventional-radiology')),
+        n('/orthopedics','section',
+          l('/joint-replacement [hip, knee, shoulder]'), l('/sports-medicine'), l('/osteoporosis')
+        ),
+        n('/speech-audiology-center','section',
+          l('/pediatric-speech-pathology'), l('/voice-swallowing-disorders'), l('/audiology-services')
+        ),
+        n('/rehabilitation','section', l('/inpatient-rehabilitation'), l('/outpatient-rehabilitation')),
+        n('/neurology','section', l('/our-services'), l('/concussion-assessment-treatment')),
+        n('/surgical-specialties','section',
+          n('/bariatric-weight-loss-surgery','section', l('/frequently-asked-questions'), l('/our-doctors'))
+        ),
+        l('/breathing-and-lung-health'), l('/cardiac-rehab'),
+        l('/cardiology → /cardiovascular-laboratory'), l('/colorectal-surgery'),
+        l('/division-of-geriatrics-and-palliative-care'), l('/emergency-department → /stroke'),
+        l('/hand-wrist-elbow-center'), l('/hyperbaric-medicine'),
+        l('/inpatient-behavioral-unit'), l('/lgbtq-services'), l('/maternity → /locations'),
+        l('/mental-behavioral-services → /ECT-program'), l('/nutritional-counseling'),
+        l('/pain-management'), l('/pediatrics'),
+        l('/phelps-spine → /our-doctors'), l('/psychiatry-counseling'),
+        l('/robotic-surgery → /faq, /our-doctors'), l('/senior-health'), l('/sleep-center'),
+        l('/surgery → /thoracic-surgery'), l('/urology'), l('/womens-health'), l('/wound-skin-care'),
+        l('/balance-center'),
+        l('/sites/ [PDFs: PET-CT order, ancillary service guide, stroke infographic]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'plainview',
+    name: 'Plainview Hospital',
+    abbr: 'PV',
+    url: 'plainview.northwell.edu',
+    pages: 31,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section', l('/hospital-information'), l('/about-your-room')),
+        l('/find-care'), l('/patient-information'), l('/get-involved'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        l('/cardiology-interventional-cardiology'), l('/wound-care-and-hyperbaric-medicine'),
+        l('/surgical-specialties'), l('/bariatric-surgery'), l('/emergency-department'),
+        l('/endocrinology'), l('/division-gastroenterology'), l('/general-surgery'),
+        l('/palliative-care'), l('/interventional-radiology'), l('/pediatric-urology-surgery'),
+        l('/podiatry'), l('/urology'), l('/vein-artery-surgery'),
+        l('/sites/ [PDFs: volunteer app, organ donation]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'southoaks',
+    name: 'South Oaks Hospital',
+    abbr: 'SO',
+    url: 'southoaks.northwell.edu',
+    pages: 21,
+    cat: 'behavioral',
+    topNav: ['Find Care','Your Visit','Patient Information','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section'),
+        n('/your-visit','section', l('/hospital-information'), l('/before-you-arrive'), l('/during-your-stay')),
+        l('/patient-information'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights, /search','content'),
+        l('/addiction-services'),
+        n('/child-and-adolescent-services','section',
+          l('/school-based-mental-health-services'),
+          l('/adolescent-partial-hospitalization-program'),
+          l('/career-educational-counseling-center'),
+          l('/child-adolescent-inpatient-program')
+        ),
+        l('/comprehensive-outpatient-behavioral-services'),
+        l('/adult-inpatient-psychiatry'),
+        l('/inpatient-substance-use-disorder-programs'),
+        l('/substance-use-disorder-outpatient-clinic')
+      )
+    ]
+  },
+  {
+    id: 'ssuh',
+    name: 'South Shore Univ Hospital',
+    abbr: 'SS',
+    url: 'ssuh.northwell.edu',
+    pages: 116,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section',
+          l('/hospital-information'), l('/about-your-room'), l('/patient-experience'), l('/checking-out-discharge')
+        ),
+        n('/patient-information','section', l('/types-of-insurance')),
+        l('/find-care'), l('/get-involved'), l('/about'), l('/contact-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        n('/south-shore-heart-lung','section',
+          n('/cardiology','section', l('/find-a-doctor'), l('/contact-us')),
+          n('/cardiac-surgery','section',
+            l('/find-a-doctor'), l('/contact-us'),
+            l('/find-care/conditions'), l('/find-care/treatments [cardiac cath, mitral valve…]')
+          ),
+          n('/thoracic-surgery','section',
+            l('/find-a-doctor'), l('/find-care/conditions'), l('/find-care/treatments')
+          ),
+          l('/quality-outcomes'), l('/contact-us'),
+          l('/patient-testimonials [6]','content')
+        ),
+        n('/linda-and-john-bohlsen-neurosciences-center','section',
+          l('/stroke-center'), l('/find-a-doctor'), l('/locations'), l('/about-us'), l('/contact-us'),
+          l('/patient-testimonials [3]','content')
+        ),
+        n('/orthopedics','section', l('/patient-testimonials','content')),
+        n('/surgery','section',
+          n('/bariatric-surgery','section', l('/patient-testimonials [3]','content')),
+          l('/colon-rectal-surgery'),
+          n('/gynecologic-oncology','section', l('/patient-testimonials','content'))
+        ),
+        l('/obgyn'), l('/pediatrics'), l('/women-and-childrens-center'),
+        l('/imaging-radiology → /interventional-radiology'),
+        l('/emergency-department'), l('/palliative-care'),
+        l('/sites/ [PDFs: newborn care, breastfeeding, stroke support, NICU HEIA]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'siuh',
+    name: 'Staten Island Univ Hospital',
+    abbr: 'SI',
+    url: 'siuh.northwell.edu',
+    pages: 273,
+    cat: 'major',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About','Newsroom','Events'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section', l('/hospital-information')),
+        n('/patient-information','section', l('/types-of-insurance')),
+        l('/find-care → /find-a-doctor','tool'), l('/get-involved'), l('/about'),
+        l('/contact-us'), l('/events'), l('/newsroom → /the-latest, /insights','content'),
+        n('/heart-institute','section',
+          n('/cardiology','section',
+            l('/cardiac-electrophysiology-center'), l('/cardio-oncology'), l('/hypertrophic-cardiomyopathy'),
+            l('/womens-heart-health'), l('/vascular-medicine-intervention'),
+            l('/general-and-preventive-cardiology'), l('/interventional-cardiology'),
+            l('/cardiac-imaging-and-nuclear-cardiology')
+          ),
+          n('/cardiothoracic-surgery','section',
+            l('/cardiogenic-shock-ECMO'), l('/heart-arrhythmia-surgery'), l('/heart-valve-repair')
+          ),
+          n('/thoracic-surgery','section',
+            l('/find-a-doctor'), l('/find-care/conditions'), l('/find-care/treatments'), l('/contact-us')
+          ),
+          n('/conditions','section', l('/structural-heart-disease-and-defects'), l('/aortic-aneurysms')),
+          l('/find-a-doctor'), l('/support-resources'), l('/contact-us'),
+          l('/patient-testimonials [6]','content')
+        ),
+        n('/obgyn','section',
+          n('/obstetrics','section', l('/about-your-stay'), l('/obstetric-anesthesia')),
+          l('/maternity-services'), l('/maternal-fetal-medicine'), l('/center-womens-health'),
+          l('/urogynecology-pelvic-reconstructive-surgery'),
+          l('/find-a-doctor'), l('/locations'), l('/events')
+        ),
+        l('/neurology'),
+        n('/neurosurgery','section',
+          l('/center-for-pituitary-and-neuroendocrine-disorders'), l('/brain-tumor-center'),
+          l('/center-for-cerebrovascular-surgery-and-endovascular-neurosurgery'),
+          l('/staten-island-spine-center'), l('/stroke-rehabilitation')
+        ),
+        n('/rehabilitation-medicine','section',
+          l('/physical-medicine-rehabilitation'), l('/acute-inpatient-rehabilitation'), l('/outpatient-rehabilitation')
+        ),
+        n('/behavioral-health','section',
+          n('/center-preventions-treatment-chemical-dependency','section',
+            l('/methadone-program'), l('/outpatient-counseling'), l('/vocational-services'),
+            l('/consult-for-addiction-treatment-in-hospitals')
+          ),
+          l('/psychiatry')
+        ),
+        n('/burn-center','section', l('/patient-testimonials [2]','content')),
+        n('/cancer-institute','section',
+          l('/breast-cancer'), l('/medical-oncology-hematology'), l('/radiation-medicine'),
+          l('/gynecologic-oncology'), l('/neurology'), l('/thoracic'), l('/urologic-oncology'),
+          l('/onconephrology')
+        ),
+        n('/surgery','section',
+          n('/anesthesiology','section', l('/preparing-anesthesia-surgery')),
+          n('/comprehensive-weight-loss-center','section',
+            l('/surgical-options'), l('/non-surgical-options'), l('/online-seminar'), l('/articles [8]')
+          ),
+          n('/bariatric-surgery','section', l('/articles [8]'), l('/patient-testimonials','content')),
+          l('/colon-rectal-surgery'), l('/hernia-center'), l('/minimally-invasive-surgery'),
+          l('/plastic-surgery → /our-services'), l('/podiatry'), l('/surgical-oncology'),
+          l('/vascular-surgery → /conditions-we-treat, /non-invasive-lab'),
+          l('/departments-services'), l('/leadership')
+        ),
+        n('/pediatrics','section',
+          l('/[13 subspecialties: adolescent, cardiology, critical care, developmental, endocrinology, GI, hospital medicine, infectious disease, neonatology, nephrology, neurology, pulmonary, childrens-cancer-center]'),
+          l('/find-a-doctor'), l('/about')
+        ),
+        n('/hospice','section',
+          l('/mission-statement'), l('/staff'), l('/volunteers'), l('/bereavement-services'), l('/faq')
+        ),
+        n('/hospital-medicine','section', l('/find-a-doctor'), l('/contact-us')),
+        l('/dental-medicine'), l('/diabetes-care'), l('/otolaryngology'),
+        l('/emergency-department-ocean-breeze-north'), l('/emergency-department-princes-bay-south'),
+        l('/palliative-care'), l('/orthopedics'), l('/pulmonary-critical-care-sleep-medicine'),
+        l('/robotic-surgery'), l('/urology'), l('/vascular-interventional-radiology'),
+        l('/sites/ [PDFs: campus maps, cardiac flyers, rehab fact sheet]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'syosset',
+    name: 'Syosset Hospital',
+    abbr: 'SY',
+    url: 'syosset.northwell.edu',
+    pages: 48,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/your-visit','section', l('/hospital-information'), l('/about-your-room')),
+        l('/find-care'), l('/patient-information'), l('/get-involved'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        n('/center-for-orthopaedic-excellence','section',
+          n('/programs-services','section',
+            l('/joint-replacement'), l('/shoulder-elbow'), l('/spine-care'), l('/sports-medicine'), l('/trauma-fractures')
+          ),
+          l('/find-a-doctor'), l('/about-us'), l('/contact-us'), l('/patient-resources')
+        ),
+        n('/center-weight-management','section',
+          l('/services'), l('/frequently-asked-questions'), l('/resources'), l('/our-team'), l('/contact-us')
+        ),
+        n('/bariatric-surgery','section', l('/patient-testimonials [2]','content')),
+        l('/davis-eye-surgery-center'), l('/pain-management-center'),
+        l('/department-cardiology'), l('/emergency-department'), l('/division-general-surgery'),
+        l('/sites/ [PDFs: volunteer app, joint replacement guide, bariatric guide]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'thewell',
+    name: 'The Well',
+    abbr: 'TW',
+    url: 'thewell.northwell.edu',
+    pages: 825,
+    cat: 'content',
+    topNav: ['Topics','Trending','Our Picks','About'],
+    tree: [
+      n('/ Home','',
+        n('/topics [12 core]','section',
+          l('/aging'), l('/caregiving'), l('/chronic-diseases-conditions'),
+          l('/covid'), l('/emotional-wellness'), l('/fertility'),
+          l('/healthy-living-fitness'), l('/mens-health'), l('/parenting'),
+          l('/pregnancy'), l('/relationships-sexual-health'), l('/womens-health')
+        ),
+        n('/topics [editorial sub-topics]','section',
+          l('/brain-nerve-health'), l('/heart-health'), l('/joint-health-orthopedics'),
+          l('/skin-health'), l('/digestive-health'), l('/infectious-disease'),
+          l('/sleep[-health]')
+        ),
+        l('/trending'), l('/our-picks'), l('/about-well'), l('/contact-us'), l('/subscribe-well'),
+        n('/collection','section',
+          l('/recipes'), l('/just-curious-relationships-podcast'), l('/inside-lenox-hill')
+        ),
+        n('/editorial formats','section',
+          l('/dear-doctor/'), l('/true-story/'), l('/well-informed/'), l('/well-lived/'),
+          l('/deep-dive/'), l('/5-things-i-wish-you-knew/'), l('/so-youre/'),
+          l('/feel-good-stories/'), l('/culturally-relevant-stories/'), l('/well-lived/')
+        ),
+        l('/[800+ individual articles across all topics]','content')
+      )
+    ]
+  },
+  {
+    id: 'zucker',
+    name: 'Zucker Hillside Hospital',
+    abbr: 'ZH',
+    url: 'zucker.northwell.edu',
+    pages: 21,
+    cat: 'behavioral',
+    topNav: ['Find Care','Your Visit','Patient Information','About Us','Newsroom'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section',
+          l('/geriatric-psychiatry'), l('/early-treatment-program'), l('/boost-program'),
+          l('/center-for-research-treatment-bipolar-disorder'),
+          l('/obsessive-compulsive-disorder-center'), l('/sway-program'), l('/womens-behavioral-health')
+        ),
+        n('/your-visit','section', l('/what-to-bring'), l('/inpatient-treatment')),
+        l('/patient-information'), l('/about-us'),
+        l('/newsroom → /the-latest, /insights','content'),
+        l('/sites/ [PDFs: hospital map, SWAY referral guide]','pdf')
+      )
+    ]
+  }
+];
+
+// ─────────────────────────────────────────────
+// GROUP ORDER
+// ─────────────────────────────────────────────
+const GROUP_ORDER = [
+  'Root Site',
+  'Hospitals',
+  'Pediatric Ecosystem',
+  'Research & Professional',
+  'Content',
+];
+
+// ─────────────────────────────────────────────
+// SIDEBAR
+// ─────────────────────────────────────────────
+function buildSidebar() {
+  const list = document.getElementById('site-list');
+
+  // ── Root site pinned at very top ──
+  const root = SITES.find(s => s.cat === 'flagship');
+  if (root) {
+    const label = document.createElement('div');
+    label.className = 'site-group-label';
+    label.textContent = 'Root Site';
+    list.appendChild(label);
+
+    const item = document.createElement('div');
+    item.className = 'site-item';
+    item.dataset.id = root.id;
+    item.innerHTML = `
+      <div class="dot cat-${root.cat}"></div>
+      <div class="site-name">${root.name}</div>
+      <div class="page-count">${root.pages.toLocaleString()}</div>
+    `;
+    item.onclick = () => showSite(root.id);
+    list.appendChild(item);
+
+    const sep = document.createElement('div');
+    sep.style.cssText = 'border-top:1px solid rgba(255,255,255,0.1);margin:6px 0';
+    list.appendChild(sep);
+  }
+
+  // ── All other sites grouped ──
+  const groups = {};
+  SITES.forEach(s => {
+    if (s.cat === 'flagship') return;
+    const g = CATS[s.cat].group;
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(s);
+  });
+
+  GROUP_ORDER.filter(g => g !== 'Root Site').forEach(gName => {
+    if (!groups[gName]) return;
+    const label = document.createElement('div');
+    label.className = 'site-group-label';
+    label.textContent = gName;
+    list.appendChild(label);
+
+    groups[gName].forEach(s => {
+      const item = document.createElement('div');
+      item.className = 'site-item';
+      item.dataset.id = s.id;
+      item.innerHTML = `
+        <div class="dot cat-${s.cat}"></div>
+        <div class="site-name">${s.name}</div>
+        <div class="page-count">${s.pages.toLocaleString()}</div>
+      `;
+      item.onclick = () => showSite(s.id);
+      list.appendChild(item);
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
+// OVERVIEW
+// ─────────────────────────────────────────────
+function buildOverview() {
+  const grid = document.getElementById('overview-grid');
+
+  // ── Root site (Northwell Health) pinned at top ──
+  const root = SITES.find(s => s.cat === 'flagship');
+  if (root) {
+    const rootLabel = document.createElement('div');
+    rootLabel.className = 'group-title';
+    rootLabel.textContent = 'Root Site';
+    grid.appendChild(rootLabel);
+
+    const rootRow = document.createElement('div');
+    rootRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:4px;grid-column:1/-1';
+    grid.appendChild(rootRow);
+
+    const rootCard = document.createElement('div');
+    rootCard.className = `overview-card cat-${root.cat}`;
+    rootCard.innerHTML = `
+      <h3>${root.name}</h3>
+      <div class="card-url">${root.url}</div>
+      <div class="card-stats">
+        <span class="card-stat">📄 ${root.pages.toLocaleString()} pages</span>
+        <span class="card-stat" style="background:transparent;padding:0;font-size:10px;opacity:.7">Root / Flagship</span>
+      </div>
+      <div class="card-top-nav">
+        ${root.topNav.map(t => `<span class="nav-pill">${t}</span>`).join('')}
+      </div>
+    `;
+    rootCard.onclick = () => showSite(root.id);
+    rootRow.appendChild(rootCard);
+
+    const divider = document.createElement('div');
+    divider.style.cssText = 'border-top:1px solid var(--gray-200);margin:8px 0 4px;grid-column:1/-1';
+    grid.appendChild(divider);
+  }
+
+  // ── All other sites grouped below ──
+  const groups = {};
+  SITES.forEach(s => {
+    if (s.cat === 'flagship') return;
+    const g = CATS[s.cat].group;
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(s);
+  });
+
+  GROUP_ORDER.filter(g => g !== 'Root Site').forEach(gName => {
+    if (!groups[gName]) return;
+    const gt = document.createElement('div');
+    gt.className = 'group-title';
+    gt.textContent = gName;
+    grid.appendChild(gt);
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:4px;grid-column:1/-1';
+    grid.appendChild(row);
+
+    groups[gName].forEach(s => {
+      const card = document.createElement('div');
+      card.className = `overview-card cat-${s.cat}`;
+      card.innerHTML = `
+        <h3>${s.name}</h3>
+        <div class="card-url">${s.url}</div>
+        <div class="card-stats">
+          <span class="card-stat">📄 ${s.pages.toLocaleString()} pages</span>
+          <span class="card-stat cat-${s.cat}" style="background:transparent;padding:0;font-size:10px;opacity:.7">${CATS[s.cat].label}</span>
+        </div>
+        <div class="card-top-nav">
+          ${s.topNav.map(t => `<span class="nav-pill">${t}</span>`).join('')}
+        </div>
+      `;
+      card.onclick = () => showSite(s.id);
+      row.appendChild(card);
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
+// TREE RENDERING
+// ─────────────────────────────────────────────
+const TAG_MAP = {
+  'section': { cls: 'tag-section', icon: '📁' },
+  'program': { cls: 'tag-program', icon: '⚕️' },
+  'pdf':     { cls: 'tag-pdf',     icon: '📄' },
+  'tool':    { cls: 'tag-tool',    icon: '🔍' },
+  'content': { cls: 'tag-content', icon: '📰' },
+  '':        { cls: '',            icon: '🏠' },
+};
+
+function renderNode(node, depth) {
+  const el = document.createElement('div');
+  el.className = 'tree-node';
+
+  const hasChildren = node.children && node.children.length > 0;
+  const tagInfo = TAG_MAP[node.tag || ''] || { cls: '', icon: '·' };
+  const icon = depth === 0 ? '🏠' : (hasChildren ? (node.tag === 'program' ? '⚕️' : node.tag === 'pdf' ? '📄' : node.tag === 'content' ? '📰' : node.tag === 'tool' ? '🔍' : '📁') : '↳');
+
+  const row = document.createElement('div');
+  row.className = 'tree-row';
+
+  // indent
+  for (let i = 0; i < depth; i++) {
+    const ind = document.createElement('div');
+    ind.className = 'tree-indent';
+    row.appendChild(ind);
+  }
+
+  // toggle
+  const toggle = document.createElement('div');
+  toggle.className = `tree-toggle ${hasChildren ? '' : 'leaf'}`;
+  toggle.textContent = hasChildren ? '▶' : '';
+  row.appendChild(toggle);
+
+  // icon
+  const iconEl = document.createElement('div');
+  iconEl.className = 'tree-icon';
+  iconEl.textContent = depth === 0 ? '🏠' : (hasChildren ? (node.tag === 'pdf' ? '📄' : node.tag === 'content' ? '📰' : node.tag === 'tool' ? '🔍' : node.tag === 'program' ? '⚕️' : '📁') : '↳');
+  row.appendChild(iconEl);
+
+  // label
+  const label = document.createElement('div');
+  label.className = `tree-label depth-${Math.min(depth, 2)}`;
+  label.textContent = node.label;
+  row.appendChild(label);
+
+  // tag chip
+  if (node.tag && node.tag !== '') {
+    const tag = document.createElement('span');
+    tag.className = `tree-tag ${tagInfo.cls}`;
+    tag.textContent = node.tag;
+    row.appendChild(tag);
+  }
+
+  // child count
+  if (hasChildren) {
+    const cc = document.createElement('span');
+    cc.className = 'child-count';
+    cc.textContent = `${node.children.length}`;
+    row.appendChild(cc);
+  }
+
+  el.appendChild(row);
+
+  if (hasChildren) {
+    const children = document.createElement('div');
+    children.className = 'tree-children';
+    node.children.forEach(child => {
+      children.appendChild(renderNode(child, depth + 1));
+    });
+    el.appendChild(children);
+
+    row.onclick = () => {
+      const isOpen = children.classList.contains('open');
+      children.classList.toggle('open', !isOpen);
+      toggle.classList.toggle('open', !isOpen);
+    };
+
+    // auto-open depth 0
+    if (depth === 0) {
+      children.classList.add('open');
+      toggle.classList.add('open');
+    }
+  }
+
+  return el;
+}
+
+// ─────────────────────────────────────────────
+// SHOW SITE
+// ─────────────────────────────────────────────
+function showSite(id) {
+  const site = SITES.find(s => s.id === id);
+  if (!site) return;
+
+  // sidebar active
+  document.querySelectorAll('.site-item').forEach(el => el.classList.remove('active'));
+  const sideItem = document.querySelector(`.site-item[data-id="${id}"]`);
+  if (sideItem) sideItem.classList.add('active');
+
+  // topbar
+  const badge = document.getElementById('site-badge');
+  badge.className = `cat-${site.cat}`;
+  badge.id = 'site-badge';
+  badge.textContent = site.abbr;
+  badge.style.display = '';
+
+  document.getElementById('site-title').textContent = site.name;
+  document.getElementById('site-url').textContent = site.url;
+
+  const chip = document.getElementById('cat-chip');
+  chip.className = `meta-chip cat-${site.cat}`;
+  chip.textContent = `${CATS[site.cat].label} · ${site.pages.toLocaleString()} pages`;
+  chip.style.display = '';
+
+  document.getElementById('expand-all').style.display = '';
+  document.getElementById('collapse-all').style.display = '';
+  document.getElementById('back-btn').style.display = 'flex';
+
+  // switch views
+  document.getElementById('overview-view').style.display = 'none';
+  document.getElementById('search-view').style.display = 'none';
+  const tv = document.getElementById('tree-view');
+  tv.style.display = 'block';
+  tv.innerHTML = '';
+
+  // render tree
+  const root = document.createElement('div');
+  root.className = 'tree-root';
+
+  const header = document.createElement('div');
+  header.className = 'tree-root-header';
+  header.innerHTML = `
+    <span>🌐 <strong>${site.url}</strong></span>
+    <span>📄 ${site.pages.toLocaleString()} pages in sitemap</span>
+    <span>🏷 ${CATS[site.cat].label}</span>
+    <span>🔗 Top nav: ${site.topNav.join(' · ')}</span>
+  `;
+  root.appendChild(header);
+
+  const body = document.createElement('div');
+  body.className = 'tree-body';
+
+  site.tree.forEach(node => {
+    body.appendChild(renderNode(node, 0));
+  });
+
+  root.appendChild(body);
+  tv.appendChild(root);
+}
+
+function showOverview() {
+  document.querySelectorAll('.site-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('site-badge').textContent = '';
+  document.getElementById('site-badge').className = '';
+  document.getElementById('site-badge').style.display = 'none';
+  document.getElementById('site-title').textContent = 'All Sites';
+  document.getElementById('site-url').textContent = 'northwell.edu network';
+  document.getElementById('cat-chip').style.display = 'none';
+  document.getElementById('expand-all').style.display = 'none';
+  document.getElementById('collapse-all').style.display = 'none';
+  document.getElementById('back-btn').style.display = 'none';
+  document.getElementById('overview-view').style.display = '';
+  document.getElementById('tree-view').style.display = 'none';
+  document.getElementById('search-view').style.display = 'none';
+  document.getElementById('search').value = '';
+  // reset sidebar filter
+  document.querySelectorAll('.site-item').forEach(el => el.style.display = '');
+  document.querySelectorAll('.site-group-label, .site-group-sep').forEach(el => el.style.display = '');
+}
+
+function expandAll() {
+  document.querySelectorAll('.tree-children').forEach(el => el.classList.add('open'));
+  document.querySelectorAll('.tree-toggle').forEach(el => { if (!el.classList.contains('leaf')) el.classList.add('open'); });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.tree-children').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.tree-toggle').forEach(el => el.classList.remove('open'));
+}
+
+// ─────────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// SEARCH INDEX
+// ─────────────────────────────────────────────
+const SEARCH_INDEX = []; // { site, label, breadcrumb }
+
+function indexNode(node, site, ancestors) {
+  SEARCH_INDEX.push({ site, label: node.label, breadcrumb: ancestors.join(' › ') });
+  if (node.children && node.children.length) {
+    node.children.forEach(child => indexNode(child, site, [...ancestors, node.label]));
+  }
+}
+
+SITES.forEach(site => {
+  if (site.tree && site.tree.length) {
+    site.tree.forEach(root => indexNode(root, site, []));
+  }
+});
+
+function highlight(text, q) {
+  const idx = text.toLowerCase().indexOf(q);
+  if (idx === -1) return escHtml(text);
+  return escHtml(text.slice(0, idx)) + '<mark>' + escHtml(text.slice(idx, idx + q.length)) + '</mark>' + escHtml(text.slice(idx + q.length));
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showSearchView(q) {
+  const sv = document.getElementById('search-view');
+  document.getElementById('overview-view').style.display = 'none';
+  document.getElementById('tree-view').style.display = 'none';
+  sv.style.display = '';
+
+  const ql = q.toLowerCase();
+  const hits = SEARCH_INDEX.filter(e => e.label.toLowerCase().includes(ql));
+
+  if (!hits.length) {
+    sv.innerHTML = `<div class="search-no-results">No results for "<strong>${escHtml(q)}</strong>"</div>`;
+    return;
+  }
+
+  // group by site
+  const bySite = {};
+  hits.forEach(h => {
+    if (!bySite[h.site.id]) bySite[h.site.id] = { site: h.site, hits: [] };
+    bySite[h.site.id].hits.push(h);
+  });
+
+  const siteCount = Object.keys(bySite).length;
+  let html = `<div class="search-summary">${hits.length} result${hits.length !== 1 ? 's' : ''} across ${siteCount} site${siteCount !== 1 ? 's' : ''}</div>`;
+
+  Object.values(bySite).forEach(({ site, hits: siteHits }) => {
+    html += `<div class="search-group">
+      <div class="search-group-header">
+        <span class="search-group-name" onclick="showSite('${site.id}')">${escHtml(site.name)}</span>
+        <span class="search-group-url">${escHtml(site.url)}</span>
+      </div>`;
+    siteHits.slice(0, 12).forEach(h => {
+      html += `<div class="search-hit" onclick="showSite('${site.id}')">
+        <span>${highlight(h.label, q)}</span>
+        ${h.breadcrumb ? `<span class="search-hit-path">${escHtml(h.breadcrumb)}</span>` : ''}
+      </div>`;
+    });
+    if (siteHits.length > 12) {
+      html += `<div style="font-size:11px;color:var(--gray-600);padding:4px 10px">+${siteHits.length - 12} more — <span style="cursor:pointer;text-decoration:underline" onclick="showSite('${site.id}')">open site</span></div>`;
+    }
+    html += `</div>`;
+  });
+
+  sv.innerHTML = html;
+}
+
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.trim();
+
+  // Always filter sidebar items
+  document.querySelectorAll('.site-item').forEach(el => {
+    const name = el.querySelector('.site-name').textContent.toLowerCase();
+    el.style.display = (!q || name.includes(q.toLowerCase())) ? '' : 'none';
+  });
+  document.querySelectorAll('.site-group-label, .site-group-sep').forEach(el => {
+    const items = [];
+    let sib = el.nextElementSibling;
+    while (sib && !sib.classList.contains('site-group-label') && !sib.classList.contains('site-group-sep')) {
+      if (sib.classList.contains('site-item')) items.push(sib);
+      sib = sib.nextElementSibling;
+    }
+    el.style.display = items.some(i => i.style.display !== 'none') ? '' : 'none';
+  });
+
+  if (q.length >= 2) {
+    showSearchView(q);
+  } else {
+    document.getElementById('search-view').style.display = 'none';
+    document.getElementById('overview-view').style.display = '';
+    document.getElementById('tree-view').style.display = 'none';
+  }
+});
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+buildSidebar();
+buildOverview();
+showOverview();
+</script>
+</body>
+</html>
