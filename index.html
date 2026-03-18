@@ -547,7 +547,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>25 sites · Site IA Explorer</p>
+    <p>26 sites · Site IA Explorer</p>
   </div>
   <div id="search-wrap">
     <input type="text" id="search" placeholder="Search sites & pages…">
@@ -574,7 +574,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">25 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">26 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -1885,6 +1885,76 @@ const SITES = [
           l('/support-services [30+ groups]')
         ),
         l('/newsroom','content')
+      )
+    ]
+  },
+  {
+    id: 'heart',
+    name: 'Cardiovascular Institute',
+    abbr: 'CVI',
+    url: 'heart.northwell.edu',
+    pages: 62,
+    cat: 'institute',
+    topNav: ['Find a Doctor','Locations','Areas of Care','Clinical Trials','For Professionals'],
+    tree: [
+      n('/ Home','',
+        l('/find-a-doctor','tool'),
+        l('/locations','tool'),
+        n('/areas-of-care','section',
+          n('/center-for-arrhythmias','program',
+            l('/atrial-fibrillation-program'),
+            l('/surgical-arrhythmia-management'),
+            l('/cardiac-device-lead-management'),
+            l('/left-atrial-appendage-occlusion')
+          ),
+          n('/center-for-atherosclerosis','program',
+            l('/interventional-cardiology'),
+            l('/vascular-medicine-surgery'),
+            l('/surgical-management-coronary-artery-disease')
+          ),
+          n('/center-for-heart-lung-failure','program',
+            l('/advanced-heart-failure'),
+            l('/heart-transplant'),
+            l('/hypertrophic-cardiomyopathy'),
+            l('/pulmonary-hypertension')
+          ),
+          n('/center-for-pediatric-adult-congenital-heart-disease','program',
+            l('/pediatric-congenital-heart-surgery'),
+            l('/adult-congenital-heart-disease')
+          ),
+          n('/center-for-prevention-and-wellness','program',
+            l('/heart-disease-prevention-cardiometabolic-health'),
+            l('/advanced-lipid-disorders-lipoprotein-apheresis'),
+            l('/sports-cardiology')
+          ),
+          n('/center-for-valvular-disease','program',
+            l('/aortic-valve-disease-repair-replacement'),
+            l('/mitral-valve-disease-repair-replacement'),
+            l('/tricuspid-valve-disease-repair-replacement')
+          ),
+          n('/center-for-vascular-disease','program',
+            l('/aortic-program'),
+            l('/marfan-syndrome-connective-tissue-disorders')
+          ),
+          n('/center-for-womens-heart-health','program',
+            l('/advanced-chest-pain-coronary-physiology'),
+            l('/high-risk-cardiovascular-obstetric'),
+            l('/womens-heart-health-program')
+          )
+        ),
+        n('/clinical-trials','section',
+          l('/cardiology-trials','tool'),
+          l('/cardiothoracic-surgery-trials','tool'),
+          l('/pediatric-cardiology-trials','tool')
+        ),
+        n('/for-professionals','section',
+          n('/educational-programs','section',
+            l('/cardiology'), l('/cardiac-surgery'),
+            l('/vascular-surgery'), l('/pediatric-cardiology')
+          ),
+          l('/careers'),
+          l('/membership')
+        )
       )
     ]
   }
