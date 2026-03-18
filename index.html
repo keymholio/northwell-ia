@@ -2395,7 +2395,7 @@ function buildOverview() {
     row.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:4px;grid-column:1/-1';
     grid.appendChild(row);
 
-    groups[gName].forEach(s => {
+    groups[gName].sort((a, b) => a.name.localeCompare(b.name)).forEach(s => {
       const card = document.createElement('div');
       card.className = `overview-card cat-${s.cat}`;
       card.innerHTML = `
