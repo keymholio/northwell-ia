@@ -630,8 +630,13 @@ const SITES = [
           n('/otolaryngology','section', l('/programs-services [9]'),l('/find-a-doctor'),l('/locations')),
           n('/plastic-surgery','section', l('/procedures'),l('/expert-insights'),l('/locations')),
           l('/anesthesiology'), l('/center-for-bioelectronic-medicine'),
-          l('/dental-medicine'), l('/dermatology'), l('/emergency-medicine'),
+          l('/dental-medicine'),
+          n('/dermatology','section',
+            n('/areas-of-care','section', l('/cosmetic-dermatology','program'))
+          ),
+          l('/emergency-medicine'),
           l('/endocrinology-diabetes-metabolism'), l('/family-medicine'),
+          l('/gastroenterology'),
           l('/nephrology'), l('/primary-care'), l('/rehabilitation-network'),
           l('/rheumatology'), l('/robotic-surgery'), l('/surgery'),
           l('/telehealth'), l('/urology'), l('/thoracic-surgery')
