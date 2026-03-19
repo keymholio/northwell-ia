@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Northwell Health — Site IA</title>
 <style>
   :root {
@@ -233,7 +233,7 @@
 
     #menu-btn { display: flex; align-items: center; justify-content: center; }
 
-    #topbar { padding: 10px 16px; gap: 10px; }
+    #topbar { padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top)); gap: 10px; }
     #content { padding: 16px; }
 
     #site-title { font-size: 15px; }
