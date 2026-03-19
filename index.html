@@ -628,7 +628,7 @@ document.getElementById('auth-input').focus();
 <div id="sidebar">
   <div id="sidebar-header">
     <h1>Northwell Health</h1>
-    <p>33 sites · Site IA Explorer</p>
+    <p>34 sites · Site IA Explorer</p>
   </div>
   <div id="sidebar-all-sites" onclick="showOverview();closeSidebar()" style="display:none">← All Sites</div>
   <div id="search-wrap">
@@ -661,7 +661,7 @@ document.getElementById('auth-input').focus();
   <div id="content">
     <div id="overview-view">
       <div class="overview-title">Northwell Health — Site Network</div>
-      <div class="overview-subtitle">33 sites · Click any card to explore the full IA</div>
+      <div class="overview-subtitle">34 sites · Click any card to explore the full IA</div>
       <div id="overview-grid"></div>
     </div>
     <div id="tree-view"></div>
@@ -1611,6 +1611,53 @@ const SITES = [
         l('/palliative-care'), l('/interventional-radiology'), l('/pediatric-urology-surgery'),
         l('/podiatry'), l('/urology'), l('/vein-artery-surgery'),
         l('/sites/ [PDFs: volunteer app, organ donation]','pdf')
+      )
+    ]
+  },
+  {
+    id: 'pbmc',
+    name: 'Peconic Bay Medical Center',
+    abbr: 'PB',
+    url: 'pbmc.northwell.edu',
+    pages: 50,
+    cat: 'community',
+    topNav: ['Find Care','Your Visit','Patient Information','Get Involved','Billing'],
+    tree: [
+      n('/ Home','',
+        n('/find-care','section',
+          l('/cardiology → kanas-regional-heart-center'),
+          l('/cancer-care'),
+          l('/orthopedics-spine'),
+          n('/womens-health','section',
+            l('/obstetrics-gynecology'), l('/maternity'),
+            l('/breast-health-surgery'), l('/imaging-mammography-services')
+          ),
+          l('/neurosurgery'), l('/neurology'),
+          l('/bariatric-surgery'), l('/colorectal-surgery'),
+          l('/urology'),
+          l('/surgery → kanas-center-for-advanced-surgery'),
+          l('/robotic-surgery'),
+          l('/gastroenterology'), l('/endoscopy-digestive-health'),
+          l('/infectious-diseases'),
+          l('/nephrology-dialysis'),
+          l('/pulmonary-medicine'),
+          l('/pain-management'),
+          l('/palliative-care → pegasus-house'),
+          l('/ophthalmology'),
+          l('/rehabilitation-services-therapy'),
+          l('/imaging-radiology'),
+          l('/ambulatory-care'),
+          l('/emergency-department → poole-family-trauma-emergency-center')
+        ),
+        n('/your-visit','section',
+          l('/hospital-information'),
+          l('/directions'),
+          n('/your-stay','section',
+            l('/before-your-stay'), l('/during-your-stay'), l('/after-your-stay')
+          )
+        ),
+        l('/patient-information'), l('/get-involved'), l('/billing'),
+        l('/about-us'), l('/newsroom','content'), l('/contact-us')
       )
     ]
   },
