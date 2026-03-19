@@ -218,7 +218,7 @@
 
   /* ── MOBILE ── */
   @media (max-width: 680px) {
-    body { overflow: hidden; }
+    body { overflow: hidden; background: #fff; }
 
     #sidebar {
       position: fixed;
@@ -242,9 +242,10 @@
       padding-top: calc(max(16px, env(safe-area-inset-top)) + 8px);
       gap: 10px;
     }
-    #content { padding: 16px; }
+    #content { padding: 16px; background: var(--gray-50); }
 
     #site-title { font-size: 15px; }
+    #back-btn { display: none !important; }
     #topbar-meta { display: none; }
     .tree-root-header { flex-direction: column; gap: 6px; }
 
