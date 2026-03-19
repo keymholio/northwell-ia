@@ -231,9 +231,17 @@
     #sidebar.open { transform: translateX(0); }
     #sidebar-overlay.open { display: block; }
 
-    #menu-btn { display: flex; align-items: center; justify-content: center; }
+    #menu-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px;
+      margin-left: -6px;
+    }
 
-    #topbar { padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top)); gap: 10px; }
+    #topbar {
+      padding: 0 16px 10px;
+      padding-top: calc(max(16px, env(safe-area-inset-top)) + 8px);
+      gap: 10px;
+    }
     #content { padding: 16px; }
 
     #site-title { font-size: 15px; }
